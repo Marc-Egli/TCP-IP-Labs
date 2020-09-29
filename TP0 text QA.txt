@@ -1,0 +1,204 @@
+Q1/ List your findings here:
+
+[A1.a] <my ip>= 10.0.2.15
+[A1.b] <my netmask>= 255.255.255.0 (24 bits prefix)
+[A1.c] <my gateway>= 10.0.2.2
+
+
+
+Q2/ Is your IP address public or private? What does the netmask in IPv4 mean?
+
+[A2]
+It is private, because it is in a subnet behind a gateway.
+Also the IP address is a special address that belongs to the reserved private network 10.0.0.0/8.
+The netmask in IPv4 specifies the size of the subnet prefix (the mask is a sequence of bits where 1s indicate the position of the prefix).
+
+
+
+Q3/ Write a filter command that displays only the packets with destination IP address of your default gateway. Do you see any packet captured if you navigate to a webpage through your browser? If yes/no, explain the reason behind your observation?
+
+[A3]
+filter command: ip.dst == 10.0.2.2
+We don’t see any packets when navigating to a webpage. 
+The reason is that the destination IP of the packets being sent corresponds to the IP address of the webpage that we are visiting, not the IP address of the default gateway by which we are filtering the results.
+
+
+
+Q4/ Start a new capture with Wireshark and then ping www.epfl.ch. Which exchanges of messages is happening after the first ping command according to the theory? Now find these messages in the Wireshark output. Do you see only ICMP packets? Stop the ping program and start it again after a couple of seconds. Is there a difference from the first captured packets?
+
+[A4]
+When pinging a domain name, the computer sends a request to the DNS server asking for the IP address of that domain. The Name server then answers back with the corresponding IP address. So in theory, we should see DNS packages before ICMP packages.
+
+In Wireshark, we can indeed see DNS messages before seeing the ICMP packets.
+Typically, if we stop the ping program and start it again, there shouldn't be anymore DNS requests. However, since www.epfl.ch uses a Content Delivery Network, a new IP address could be returned to access the content. In that case, Wireshark will display another destination address, and there will also be DNS messages.
+
+
+
+Q5/ In a browser open www.netflix.com. Next, try pinging it. Does it work? Explain the result
+
+[A5]
+The ping command executes but there is no reply.
+It means that the ICMP packet (ping) was silently discarded with no response sent. Since the website is loading on the browser, the network is not congested. Therefore, ping is probably disabled on the end point.
+
+
+
+Q6/ Ping www.canterbury.ac.nz and www.newzealand.com. What are Round-trip times (RTTs) for each ping? Based on your observation, can you identify which server can be located in New Zealand?
+
+[A6]
+- The average ping round-trip times for  www.canterbury.ac.nz average 343.485 ms
+- The average ping round-trip times for  www.newzealand.com average 23.136 ms
+
+- Round-trip time (RTT) is the duration it takes for a network request to go from a starting point to a destination and back again to the starting point. Based on the distance from Switzerland to New Zealand of about 18,760 kilometres, the round-trip time of 344 ms (www.canterbury.ac.nz) is more likely to describe the time of the network request to New Zealand and back.
+
+
+
+Q7/ Start Wireshark and do traceroute to www.grimper.ch. What is the IP address of grimper.ch? Is the system of the virtual machine using ICMP, TCP or UDP for traceroute? Write down the result of the traceroute.
+
+[A7]
+www.grimper.com posses multiple IP addresses. The IP addresses of www.grimper.ch are either 172.67.73.241 or 104.26.10.137 or 104.26.11.137.
+
+The system of the virtual machine is using UDP for traceroute.
+
+traceroute to www.grimper.ch (172.67.73.241), 30 hops max, 60 byte packets
+ 1  _gateway (10.0.2.2)  0.220 ms  0.174 ms  0.157 ms
+ 2  10.102.0.1 (10.102.0.1)  1.926 ms  1.919 ms  1.765 ms
+ 3  105.193.25.185.swissnetwork.ch (185.25.193.105)  2.213 ms  2.141 ms  2.035 ms
+ 4  * * *
+ 5  te0-0-1-1.rcr11.qls01.atlas.cogentco.com (149.14.48.73)  3.958 ms  4.036 ms  4.018 ms
+ 6  te0-0-1-0.rcr11.brn01.atlas.cogentco.com (154.54.74.197)  5.218 ms  4.146 ms  4.648 ms
+ 7  te0-0-2-0.rcr11.bsl01.atlas.cogentco.com (154.54.39.250)  5.739 ms  5.577 ms  5.626 ms
+ 8  te0-2-0-1.ccr51.zrh02.atlas.cogentco.com (130.117.2.145)  6.953 ms  6.926 ms  7.294 ms
+ 9  be2195.rcr21.mil01.atlas.cogentco.com (154.54.61.82)  10.619 ms  10.932 ms  11.031 ms
+10  cloudflare.demarc.cogentco.com (149.6.153.218)  21.080 ms  21.329 ms  21.615 ms
+11  172.67.73.241 (172.67.73.241)  15.731 ms  15.730 ms  15.305 ms
+
+
+
+Q8/ Identify the TCP connections where the destination IP address is the IP address of the www.epfl.ch webpage. Is there one, or are there several such connections?
+
+[A8]
+The identified TCP connections are : 172.67.2.106 and 104.20.229.49.
+A possible answer why we identified multiple TCP connections is the amount of ressources that have to be loaded on the website. www.epfl.ch has a lot of ressources to be loaded and therefore it would be to slow to load everything through only one TCP connection.
+
+
+
+Q9/ What is the MAC address of your ethernet interface? How can you find a MAC address of your default
+gateway?
+
+[A9]
+The MAC address of the ethernet interface is: 08:00:27:2b:ba:92 (found with the ifconfig -a command)
+To find the MAC address of the default gateway, we can use the arp command. When using it, we find that the MAC address of the default gateway is: 52:54:00:12:35:02
+
+
+Q10/ If you and your friend were on the same subnet, could you find a MAC address of your lab partner’s machine from your machine? How?
+
+[A10]
+Yes, this can be done by using the ARP protocol. ARP, Address Resolution Protocol is used to identify what devices possesses a given IP address. The request would go through the broadcast address especially srt for ARP.
+
+
+Q11/ Ping www.newzealand.com. What is the MAC address of the packet received from it while pinging?
+Is this the MAC address of the newzealand.com server?
+
+The MAC address from of the packet received is the MAC address of the default gateway which is : 52:54:00:12:35:02.
+
+
+
+Q12/ Try pinging www.grimper.ch and observe the traffic with Wireshark. What happens?
+
+[A12]
+After pinging www.grimper.ch with the new DNS server configuration we get the following error:
+Temporary failure in name resolution
+This error comes from the fact that when we execute the ping command, it first has to resolve the IP address corresponding to www.grimper.ch. Therefore it is sending a DNS request to the defined DNS server. 1.2.3.4 is not a DNS server and therefore does not know the IP corresponding to www.grimper.ch.
+It also can't relay the request to an actual DNS server.
+
+
+Q13/ Try pinging the IP address of grimper that you discovered in Sections 3.3 and 3.4. Does it work?
+
+[A13] 
+Pinging 172.67.73.241 (IP address of www.grimper.ch) works because there is no domain name resolution involved in the process as we already entered an IP address.
+
+
+
+Q14/ In the > prompt, type set type=A for IPv4 or set type=AAAA for IPv6. Then type epfl.ch. Give its IPv4 and IPv6 addresses.
+
+[A14]
+IPv4 : 128.178.222.108
+IPv6 : 2001:620:618:1de:1:80b2:de6c:1
+
+
+
+Q15/ Filter the DNS packets in Wireshark. Look at the capture and identify the packet in which you see the same name. How does this differ from the usual DNS response observed in previous questions? Based on the observed difference, comment on how traceroute works.
+
+[A15]
+First, we can identify DNS request send to identify the IP of ww.grimper.ch
+Also we identify the DNS packet as a query of the routers name which is unusual.
+
+Once traceroute knows what IP to trace it sends UDP packets with a low TTL, identified by the red background and white text in wireshark. When reading more about how traceroute works we learn that it sends UDP packets with increasing time to live. As soon as one packet reaches the destination an ICMP packet will be sent back as there is no UDP port on the destination currently listening for the send UDP packets. Also traceroute queries the name of the routers in path with DNS.
+
+
+
+Q16/ Describe some differences in the observed traffic compared to the IPv4 case. Write the average RTT
+you get and compare it with the IPv4 case. Explain the differences if any.
+
+[A16]
+Differences:
+1a. With IPv4, the client requests both the A and the AAAA records.
+1b. With IPv6, the client only requests the AAAA records through the DNS query
+
+2a. With IPv4, the client pings the server through ICMP messages (which are encapsulated in IPv4 packets).
+2b. With IPv6, we can see a packet which is sent using the Teredo protocol in order to examine the destination IPv6 address by performing a "direct IPv6 connectivity test”. 
+Then the ICMPv6 packets (Echo requests) are sent encapsulated in UDP packets destined to the Teredo server IPv4 address and to the Teredo port. The server replies using the same mechanism.
+
+The average RTT is about 53 ms which is much higher than the average RTT when using IPv4 (about 17 ms) 
+
+
+
+Q17/ Write the result. Does the path to grimper.ch in the IPv6 Internet cross the same routers as in IPv4?
+[A17]
+traceroute to www.grimper.ch (2606:4700:20::681a:b89) from 2001:0:53aa:64c:1c77:c25:46e6:3e91, 30 hops max, 24 byte packets
+ 1  6to4.fra1.he.net (2001:470:0:150::2)  133.285 ms  29.557 ms  29.361 ms
+ 2  ve306.core1.fra1.he.net (2001:470:0:150::1)  80.983 ms  47.291 ms *
+ 3  * * *
+ 4  2400:cb00:71:1024::a29e:52aa (2400:cb00:71:1024::a29e:52aa)  82.77 ms  49.384 ms  48.601 ms
+
+
+No, the path goes through different routers. 
+
+
+Q18/ If you access a webpage via an IPv4 connection or an IPv6 connection, do you think it has to be the
+exact same page? Can you imagine by which mechanism a difference may occur ?
+Hint: Which device (default gateway, intermediate routers, the web server, etc) do you think is in charge of
+displaying the web content for IPv4 if you are connected to an IPV4 network or for IPv6 otherwise?
+
+[A18]
+The device in charge of displaying the web content is the web server. If you decided to connect with IPv6 he will use IPv6 to transfer the data, this also holds for IPv4. As the choice of which IP protocol to use is made in the Network Layer and the displayed content is something managed at the application layer there should be no difference.
+
+A difference could occur if we introduce the caching mechanism. Suppose we request a webpage with IPv4. The content of the request will then be cached 
+with an expiration date. If the content of the web page changes and the expiration date is still valid then we will not be able to see the modification with the IPv4 protocol as we would see the cached content. If on the other hand we use IPv6 after that, we won't use the cache and a new GET request will be made, this time containing the update content.
+
+
+
+Q19/ Does it work in both cases? Write down any difference in the traceroutes.
+
+[A19] 
+Yes, it works in both cases. Some of the differences are:
+- the route is not the same
+- There are 9 hops when using IPv6, versus 7 hops with IPv4
+- the RTT is longer when using IPv6
+
+
+Q20/ Check the capture in Wireshark, is your connection to the webpage done with IPv4 or in IPv6?
+[A20]
+The connection to the webpage is made with IPv4.
+
+
+Q21/ Explain how do you think your machine could decide whether it uses IPv4 or IPv6.
+[A21]
+I think that first of all the machine checks which protocol is available. 
+If there is only one, the choice is easy.
+If both are available, then the machine performs a DNS query for both IP's (v4 and v6)
+If the machine only gets one response, the choice is straightforward.
+On the other hand, if both requests succeed then the choice of the protocol is made by the application layer.
+
+
+
