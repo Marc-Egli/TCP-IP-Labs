@@ -1,0 +1,159 @@
+COM-407: TCP/IP NETWORKING
+
+LAB EXERCISES (TP) 1
+INTRODUCTION TO MININET
+
+
+Q1/ (…) Compare the traffics captured on your host and guest machines. What are the source and destination IP addresses and port numbers of the packets coming from the server? Are there any differences in IP addresses and port numbers between two captures? If you see any differences, explain why.
+
+[A1]
+The source and destination IP addresses and port numbers of the packets coming from the server are: 
+- on the guest machine: 
+Source IP: 216.218.207.42, port 5001
+Destination IP: 10.0.2.15, port 45448
+
+- on the host machine
+Source IP: 216.218.207.42, port 5001
+Destination IP: 10.102.1.160, port 49705
+
+The source IP address and port are the same on both captures, because the Iperf server is the same.
+However, the destination IP addresses differ (10.0.2.15 on the guest / virtual machine, and 10.102.1.160 on the host machine) because the IP packets transit through the host machine:
+Since our VM is set up in NAT networking mode, the host machine will act as a router that hides the virtual machine behind it. The packets sent out by the guest machine are received by VirtualBox's NAT engine, which extracts the TCP/IP data and resends it using the host operating system. So to the physical router that is connected to the internet, the traffic will appear to be coming from the host machine (10.102.1.160), and therefore will reply back to destination address 10.102.1.160. The host then repacks and resends the packets received back to the guest machine (10.0.2.15) on its private network.
+
+The port number of the destination differs as well as it is chosen amongst the available ones for each machine (host and guest) .
+
+——————————————————————————————————————
+
+
+Q2/ What are the different links in the network?
+
+[A2]
+(h1, s1): h1-eth0:s1-eth1
+(h2, s2): h2-eth0:s1-eth2
+
+——————————————————————————————————————
+
+Q3/ What command will you use to check the network interfaces of the host h2? How many interfaces does
+host h2 have? What is/are its/their IP addresses?
+
+[A3]
+The command we will use is: h2 ifconfig
+h2 has 1 physical interface: h2-eth0, and it's IP address is 10.0.0.2
+h2 also has 1 logical interface: lo (loopback interface) and it's IP address is 127.0.0.1
+
+——————————————————————————————————————
+
+Q4/ What is the source IP address of the ICMP echo requests sent from h1 to h2?
+
+[A4]
+The source address of echo requests sent from h1 to h2 is is 10.0.0.1
+
+——————————————————————————————————————
+
+Q5/ List down the names of the interfaces that are available for capture.
+
+[A5]
+h2-eth0
+any
+Loopback: lo
+nflog
+nfqueue
+usbmon1
+Cisco remote capture: ciscodump
+Random packet generator: randpkt
+SSH remote capture: sshdump
+UDP Listener remote capture: udpdump
+
+——————————————————————————————————————
+
+Q6/ How many IPv4 networks does PC4 belong to? Name the type of the network(s).
+
+[A6]
+PC4 belongs to 3 Local Area Networks: LAN1, LAN2, and LAN3
+
+——————————————————————————————————————
+
+Q7/ Write down the IPv4 addresses you will use for the interfaces according to this addressing scheme.
+[A7.a] PC1-eth0:	10.10.10.1
+[A7.b] PC2-eth0:	10.10.20.1
+[A7.c] PC3-eth0: 	10.10.30.1
+[A7.d] PC4-eth0:	10.10.10.4
+[A7.e] PC4-eth1: 	10.10.20.4
+[A7.f] PC4-eth2:	10.10.30.4
+
+——————————————————————————————————————
+
+Q8/ Write down the IPv6 addresses you will use for the interfaces according to this addressing scheme.
+[A8.a] PC1-eth0: 	fd24:ec43:12ca:c001:10::1
+[A8.b] PC2-eth0:	fd24:ec43:12ca:c001:20::1
+[A8.c] PC3-eth0: 	fd24:ec43:12ca:c001:30::1
+[A8.d] PC4-eth0:	fd24:ec43:12ca:c001:10::4
+[A8.e] PC4-eth1: 	fd24:ec43:12ca:c001:20::4
+[A8.f] PC4-eth2:	fd24:ec43:12ca:c001:30::4
+
+——————————————————————————————————————
+
+Q9/ Write down the MAC address of the interfaces.
+[A9.a] PC1-eth0: 	da:bd:1f:e3:3b:35
+[A9.b] PC2-eth0:	1a:1e:f0:8c:2a:bb
+[A9.c] PC3-eth0: 	4e:fc:c1:07:55:ef
+[A9.d] PC4-eth0:	12:38:eb:11:6d:8c
+[A9.e] PC4-eth1:	a6:6e:97:af:6a:9d
+[A9.f] PC4-eth2:	fa:fb:3c:cf:d1:6c
+
+——————————————————————————————————————
+
+Q10/ Compute the IPv6 link-local addresses for the interfaces below.
+				fe80::4e:fc:c1:07:55:ef
+				fe80::4e:fc:c1:ff:fe:07:55:ef
+				fe80::4c:fc:c1:ff:fe:07:55:ef
+[A10.a] PC3:			fe80::4cfc:c1ff:fe07:55ef
+
+
+				fe80::fa:fb:3c:cf:d1:6c
+				fe80::fa:fb:3c:ff:fe:cf:d1:6c
+				fe80::f8:fb:3c:ff:fe:cf:d1:6c
+[A10.b] PC4, LAN3(eth2):	fe80::f8fb:3cff:fecf:d16c
+
+——————————————————————————————————————
+
+Q11/ Explain what happens.
+[A11]
+When pinging 10.10.10.4 from the host PC1:
+- PC1 sends an ARP request from its MAC address (da:bd:1f:e3:3b:35) asking “Who has 10.10.10.4? Tell 10.0.0.1”
+- It receives an ICMP message from 10.0.0.1 (itself?) saying “Destination unreachable (Host unreachable)”
+- PC4 gets a ARP request from da:bd:1f:e3:3b:35 asking “Who has 10.10.10.4? Tell 10.0.0.1”, but does not reply
+
+——————————————————————————————————————
+
+
+Calculate the link-local IPv6 address of PC4-eth0 interface:
+MAC address of PC4-eth0:				         12:38:eb:11:6d:8c
+link-local IPv6 address of PC4-eth0 interface: 	fe80::1038:ebff:fe11:6d8c
+
+
+Q12/ Describe the traffic you observe with Wireshark.
+[A12]
+
+When pinging the link-local IPv6 address of PC4-eth0 interface (ping6 fe80::1038:ebff:fe11:6d8c -I PC1-eth0):
+
+1) PC1-eth0 (fe80::d8bd:1fff:fee3:3b35) sends a Neighbor Solicitation (NS) packet for PC4-eth0 interface (fe80::1038:ebff:fe11:6d8c) to destination ff02::1:ff11:6d8c
+2) PC4-eth0 receives that NS packet from PC1-eth0
+3) PC4-eth0 sends backs an Neighbor Advertisement (NA) packet to PC1-eth0 (fe80::d8bd:1fff:fee3:3b35)
+4) PC1-eth0 receives the NA packet from PC4-eth0 (fe80::1038:ebff:fe11:6d8c)   —> fe80::1038:ebff:fe11:6d8c (sol, ovr) is at 12:38:eb:11:6d:8c
+5) PC1-eth0 can now ping request PC4-eth0 and PC4-eth0 can ping reply to PC1-eth0.
+
+Note: All of these exchange happen through ICMPv6 protocol.
+Note2: The exact same packets are captured in wiresharks from both PC1 and PC4.
+
+——————————————————————————————————————
+
+link-local IPv6 address of PC4-eth2 interface:	 fe80::f8fb:3cff:fecf:d16c
+
+ping6 <link local address of PC4 eth2> -I PC1-eth0
+ping6 fe80::f8fb:3cff:fecf:d16c -I PC1-eth0
+
+Q13/ Describe and explain the differences (if any) between the output from the two ping commands.
+[A13]
+1) PC1-eth0 (fe80::d8bd:1fff:fee3:3b35) sends a Neighbor Solicitation (NS) packet for PC4-eth2 (fe80::f8fb:3cff:fecf:d16c) to destination ff02::1:ffcf:d16c, but the destination is unreachable, so the PC1-eth0 keeps sending the same NS packet.
+2) We can see on PC4’s Wireshark capture that those NS packets are indeed captured, but on interface 0 instead of interface 2, to which they are intended. Therefore, PC4-eth2 does not see these packets and doesn’t reply.
