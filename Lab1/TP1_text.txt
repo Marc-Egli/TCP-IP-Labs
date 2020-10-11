@@ -5,7 +5,6 @@ INTRODUCTION TO MININET
 
 
 Q1/ (…) Compare the traffics captured on your host and guest machines. What are the source and destination IP addresses and port numbers of the packets coming from the server? Are there any differences in IP addresses and port numbers between two captures? If you see any differences, explain why.
-
 [A1]
 The source and destination IP addresses and port numbers of the packets coming from the server are: 
 - on the guest machine: 
@@ -26,7 +25,6 @@ The port number of the destination differs as well as it is chosen amongst the a
 
 
 Q2/ What are the different links in the network?
-
 [A2]
 (h1, s1): h1-eth0:s1-eth1
 (h2, s2): h2-eth0:s1-eth2
@@ -35,7 +33,6 @@ Q2/ What are the different links in the network?
 
 Q3/ What command will you use to check the network interfaces of the host h2? How many interfaces does
 host h2 have? What is/are its/their IP addresses?
-
 [A3]
 The command we will use is: h2 ifconfig
 h2 has 1 physical interface: h2-eth0, and it's IP address is 10.0.0.2
@@ -44,14 +41,12 @@ h2 also has 1 logical interface: lo (loopback interface) and it's IP address is 
 ——————————————————————————————————————
 
 Q4/ What is the source IP address of the ICMP echo requests sent from h1 to h2?
-
 [A4]
 The source address of echo requests sent from h1 to h2 is is 10.0.0.1
 
 ——————————————————————————————————————
 
 Q5/ List down the names of the interfaces that are available for capture.
-
 [A5]
 h2-eth0
 any
@@ -67,7 +62,6 @@ UDP Listener remote capture: udpdump
 ——————————————————————————————————————
 
 Q6/ How many IPv4 networks does PC4 belong to? Name the type of the network(s).
-
 [A6]
 PC4 belongs to 3 Local Area Networks: LAN1, LAN2, and LAN3
 
@@ -117,13 +111,17 @@ Q10/ Compute the IPv6 link-local addresses for the interfaces below.
 
 ——————————————————————————————————————
 
+run a ping to the unconfigured router from a terminal on PC1
+$ ping 10.10.10.4
+
 Q11/ Explain what happens.
 [A11]
 When pinging 10.10.10.4 from the host PC1:
-- PC1 sends an ARP request from its MAC address (da:bd:1f:e3:3b:35) asking “Who has 10.10.10.4? Tell 10.0.0.1”
+- PC1 sends an ARP request from its MAC address (da:bd:1f:e3:3b:35) ??? TO WHO??? asking “Who has 10.10.10.4? Tell 10.0.0.1”
 - It receives an ICMP message from 10.0.0.1 (itself?) saying “Destination unreachable (Host unreachable)”
 - PC4 gets a ARP request from da:bd:1f:e3:3b:35 asking “Who has 10.10.10.4? Tell 10.0.0.1”, but does not reply
 
+This is because the IP hosts haven’t been configured on each interface (with IP address of this interface, Mask of this interface, IP address of default router, IP address of DNS server)
 ——————————————————————————————————————
 
 
@@ -144,7 +142,7 @@ When pinging the link-local IPv6 address of PC4-eth0 interface (ping6 fe80::1038
 5) PC1-eth0 can now ping request PC4-eth0 and PC4-eth0 can ping reply to PC1-eth0.
 
 Note: All of these exchange happen through ICMPv6 protocol.
-Note2: The exact same packets are captured in wiresharks from both PC1 and PC4.
+Note2: The exact same packets are captured in Wireshark from both PC1 and PC4.
 
 ——————————————————————————————————————
 
@@ -157,3 +155,195 @@ Q13/ Describe and explain the differences (if any) between the output from the t
 [A13]
 1) PC1-eth0 (fe80::d8bd:1fff:fee3:3b35) sends a Neighbor Solicitation (NS) packet for PC4-eth2 (fe80::f8fb:3cff:fecf:d16c) to destination ff02::1:ffcf:d16c, but the destination is unreachable, so the PC1-eth0 keeps sending the same NS packet.
 2) We can see on PC4’s Wireshark capture that those NS packets are indeed captured, but on interface 0 instead of interface 2, to which they are intended. Therefore, PC4-eth2 does not see these packets and doesn’t reply.
+
+——————————————————————————————————————
+
+Q14/ Write down the routing table entries.
+[A14]
+# ip route 
+10.0.0.0/8 dev PC1-eth0 proto kernel scope link src 10.0.0.1
+
+# ip -6 route
+fe80::/64 dev PC1-eth0 proto kernel metric 256 pref medium
+
+——————————————————————————————————————
+
+Q15/ What are the routing table entries after assigning the new ip addresses?
+[A15]
+# ip route 
+10.10.10.0/24 dev PC1-eth0 proto kernel scope link src 10.10.10.1 
+
+# ip -6 route
+fd24:ec43:12ca:c001:10::/80 dev PC1-eth0 proto kernel metric 256 pref medium
+
+——————————————————————————————————————
+
+Q16/ For the IPv4 addresses assigned to PC1-eth0, identify the host and subnetwork portions. Why is it
+important for the PC to know this information?
+[A16]
+!!! toverify !!!
+Since we have a /24, the subnetwork portion is the first 24 bits (10.10.10), and the host portion is the remaining 8 bits (1).
+This information is important in order to be able to recognise which subnetwork the PC belongs to.
+
+——————————————————————————————————————
+
+$ ping 10.10.10.4
+
+Q17/ What do you observe on Wireshark? Explain
+[A17]
+PC1 sends an ARP packet to the Broadcast destination asking “Who has 10.10.10.4? Tell 10.10.10.1”
+PC4 receives this message on its eth0 interface, but doesn’t reply.
+Why?
+
+——————————————————————————————————————
+
+Configure the interfaces of PC4 and the one of PC2 and PC3 according to the addressing scheme.
+To verify the configuration, type:
+ip addr show
+
+ip addr add 10.10.10.1/24 dev PC1-eth0
+ip -6 addr add fd24:ec43:12ca:c001:10::1/80 dev PC1-eth0
+
+
+PC1 ip addr add 10.10.10.1/24 dev PC1-eth0
+PC2 ip addr add 10.10.20.1/24 dev PC2-eth0
+PC3 ip addr add 10.10.30.1/24 dev PC3-eth0
+PC4 ip addr add 10.10.10.4/24 dev PC4-eth0
+PC4 ip addr add 10.10.20.4/24 dev PC4-eth1
+PC4 ip addr add 10.10.30.4/24 dev PC4-eth2
+
+
+PC1 ip -6 addr add fd24:ec43:12ca:c001:10::1/80 dev PC1-eth0
+PC2 ip -6 addr add fd24:ec43:12ca:c001:20::1/80 dev PC2-eth0
+PC3 ip -6 addr add fd24:ec43:12ca:c001:30::1/80 dev PC3-eth0
+
+PC4 ip -6 addr add fd24:ec43:12ca:c001:10::4/80 dev PC4-eth0
+PC4 ip -6 addr add fd24:ec43:12ca:c001:20::4/80 dev PC4-eth1
+PC4 ip -6 addr add fd24:ec43:12ca:c001:30::4/80 dev PC4-eth2
+
+——————————————————————————————————————
+
+Q18/ Does it work? Why?
+[A18]
+No, the network is unreachable, because it is not in the same LAN. Only the PC4 interface that is on the same LAN as PC1 is reachable. 
+
+——————————————————————————————————————
+
+Q19/ Which command(s) you need to fix the problem?. On which PC did you apply them?
+[A19]
+ip route add default via 10.10.30.4
+ip -6 route add default via fd24:ec43:12ca:c001:10::4
+
+I applied these commands on PC3
+
+——————————————————————————————————————
+
+Q20/ Perform the following pings simultaneously: PC2 from PC1, PC3 from PC2, and PC1 from PC3.
+Comment on the round-trip times that you observe.
+[A20]
+
+PC1 —> PC2
+Rte min/avg/max/mdev = 0.064/0.101/0.290/0.053 ms
+
+PC2 —> PC3
+Rte min/avg/max/mdev = 0.075/0.131/0.475/0.106 ms
+
+PC3 —> PC1
+Rte min/avg/max/mdev = 0.053/0.093/0.0283/0.062ms
+
+They average times are all about a tenth of a millisecond.
+
+——————————————————————————————————————
+
+iperf test using TCP:
+PC1 (server):		$ iperf -s
+PC2 (client):		$ iperf -c 10.10.10.1
+
+
+iperf test using UDP:
+PC1 (server): 	$ iperf -s -u
+PC2 (client):		$ iperf -c 10.10.10.1 -u
+
+Q21/ Do an iperf test between PC1 and PC2 (PC1 run as server) using TCP and UDP. Report the performance
+(bandwidth values) you obtain with TCP and UDP. Do the port numbers for server and client are
+changing if you repeat experiment several times?
+[A21]
+
+using TCP:
+Bandwidth = 20.7 Gbits/sec
+If you repeat the experiment several times, the port number for the server doesn’t change (5001) but the port number for the client changes (e.g. 51646, 51648, 51650, 51652, …).
+
+using UDP:
+Bandwidth = 1.05 Mbits/sec
+If you repeat the experiment several times, the port number for the server doesn’t change (5001) but the port number for the client changes (e.g. 55858, 51748, 57494, …)
+
+——————————————————————————————————————
+
+Q22/ Do a ping again from Alice to the malicious server and check in wireshark the differences between
+packets. Write-down any difference in source and destination IP addresses.
+[A22]
+
+We observe that the Ping request destination IP address (malicious server) stays the same (10.10.30.3), but the source’s IP address of Alice’s computer (10.10.20.2) is replaced by the address of the Home router’s interface the packet is going out from: PC4-eth0 (10.10.30.4).
+
+——————————————————————————————————————
+
+Q23/ Do one more ping from Alice to the bank and check in wireshark the source and destination IP addresses.
+Based on your observations, what are the use cases for the “-j MASQUERADE” and “-j DNAT”
+configuration options?
+[A23]
+Even though we are pinging the Bank (10.10.10.1) from Alice’s computer (10.10.20.2), we are seeing packets being captured on PC3 (10.10.30.3).
+We can therefore induce that the iptables command we just executed on Alice’s home router reroutes packets that were destined to the Bank, to the malicious computer.
+Based on our observations the use cases are as follows:
+ -j MASQUERADE is used to change the source address by replacing it with the address of the interface of the the router the packet is going out from. However, it doesn’t reroute the traffic. 
+ -j DNAT is used to change the destination address by replacing the destination address of the packet to a new specified destination IP address.
+
+——————————————————————————————————————
+
+Q24/ Write down the command(s) required to this end. If you need help, check the iptables howto for
+masquerading (NAT):
+(http://www.netfilter.org/documentation/HOWTO/NAT-HOWTO-6.html)
+[A24]
+# On PC4 (Home Router), change destination addresses from 10.10.10.1 to 10.10.30.3 for the ICMP packets coming only from Alice source 10.10.20.2
+iptables -t nat -A PREROUTING -p icmp -s 10.10.20.2 -d 10.10.10.1 -j DNAT -to-destination 10.10.30.3
+
+——————————————————————————————————————
+
+Q25/ Propose the iptables command(s) that needs to be added to the malicious server in order to complete
+this task. (Make sure that IP forwarding on PC3 is enabled.)
+[A25]
+
+# Configure PC3 in order to receive the traffic from Alice’s home router, masquerade it, and send it to the bank:
+
+# 1.enable IP forwarding
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# 2. Replace destination IP address  (malicious server’s) 10.10.10.3 to (Bank) 10.10.10.1
+iptables -t nat -A PREROUTING -s 10.10.20.2 -d 10.10.30.3 -j DNAT -to-destination 10.10.10.1
+
+# 3. Modify the source IP address with malicious server’s IP address 10.10.30.3
+iptables -t nat -A POSTROUTING -o PC3-eth0 -j MASQUERADE
+
+——————————————————————————————————————
+
+Q26/ Write down the command(s) here
+[A26]
+iptables -t nat -A POSTROUTING -o PC4-eth0 -j SNAT --to 10.10.20.2
+
+——————————————————————————————————————
+
+Q27/ Now, let us assume that there is a program at PC3 that modifies the traffic before bouncing it back to
+the bank. What should you change in current configuration on PC3 iptables in order to let the traffic come
+to the program that runs on PC3 host?
+[A27]
+
+# On PC4 (Home Router), we must add the port of the program that runs on PC3 to the DNAT -to-destination IP address of the following iptables command:
+iptables -t nat -A PREROUTING -s 10.10.20.2 -d 10.10.10.1 -j DNAT -to-destination 10.10.30.3:port_of_the_program
+
+# Then we delete the command where we replace the destination IP address of the malicious server’s (10.10.10.3) to the Bank (10.10.10.1)
+iptables -t nat -D PREROUTING -s 10.10.20.2 -d 10.10.30.3 -j DNAT -to-destination 10.10.10.1
+
+# TO VERIFY
+
+——————————————————————————————————————
+
+
