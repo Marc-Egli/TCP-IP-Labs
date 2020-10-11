@@ -19,22 +19,21 @@ The source IP address and port are the same on both captures, because the Iperf 
 However, the destination IP addresses differ (10.0.2.15 on the guest / virtual machine, and 10.102.1.160 on the host machine) because the IP packets transit through the host machine:
 Since our VM is set up in NAT networking mode, the host machine will act as a router that hides the virtual machine behind it. The packets sent out by the guest machine are received by VirtualBox's NAT engine, which extracts the TCP/IP data and resends it using the host operating system. So to the physical router that is connected to the internet, the traffic will appear to be coming from the host machine (10.102.1.160), and therefore will reply back to destination address 10.102.1.160. The host then repacks and resends the packets received back to the guest machine (10.0.2.15) on its private network.
 
-The port number of the destination differs as well as it is chosen amongst the available ones for each machine (host and guest) .
+The port number of the destination differs as well as it is chosen amongst the available ones for each machine (host and guest).
 
 ——————————————————————————————————————
 
 
 Q2/ What are the different links in the network?
 [A2]
-(h1, s1): h1-eth0:s1-eth1
-(h2, s2): h2-eth0:s1-eth2
+There is one link between host 1 and switch 1 and another link between host 2 and switch 1. The controller is not included in the network but is needed to control the switches.
 
 ——————————————————————————————————————
 
 Q3/ What command will you use to check the network interfaces of the host h2? How many interfaces does
 host h2 have? What is/are its/their IP addresses?
 [A3]
-The command we will use is: h2 ifconfig
+The command we will use is: h2 ip addr show
 h2 has 1 physical interface: h2-eth0, and it's IP address is 10.0.0.2
 h2 also has 1 logical interface: lo (loopback interface) and it's IP address is 127.0.0.1
 
@@ -42,7 +41,7 @@ h2 also has 1 logical interface: lo (loopback interface) and it's IP address is 
 
 Q4/ What is the source IP address of the ICMP echo requests sent from h1 to h2?
 [A4]
-The source address of echo requests sent from h1 to h2 is is 10.0.0.1
+The source IP address of the ICMP echo request sent from h1 to h2 is 10.0.0.1 which is host 1
 
 ——————————————————————————————————————
 
@@ -69,8 +68,8 @@ PC4 belongs to 3 Local Area Networks: LAN1, LAN2, and LAN3
 
 Q7/ Write down the IPv4 addresses you will use for the interfaces according to this addressing scheme.
 [A7.a] PC1-eth0:	10.10.10.1
-[A7.b] PC2-eth0:	10.10.20.1
-[A7.c] PC3-eth0: 	10.10.30.1
+[A7.b] PC2-eth0:	10.10.20.2
+[A7.c] PC3-eth0: 	10.10.30.3
 [A7.d] PC4-eth0:	10.10.10.4
 [A7.e] PC4-eth1: 	10.10.20.4
 [A7.f] PC4-eth2:	10.10.30.4
@@ -79,8 +78,8 @@ Q7/ Write down the IPv4 addresses you will use for the interfaces according to t
 
 Q8/ Write down the IPv6 addresses you will use for the interfaces according to this addressing scheme.
 [A8.a] PC1-eth0: 	fd24:ec43:12ca:c001:10::1
-[A8.b] PC2-eth0:	fd24:ec43:12ca:c001:20::1
-[A8.c] PC3-eth0: 	fd24:ec43:12ca:c001:30::1
+[A8.b] PC2-eth0:	fd24:ec43:12ca:c001:20::2
+[A8.c] PC3-eth0: 	fd24:ec43:12ca:c001:30::3
 [A8.d] PC4-eth0:	fd24:ec43:12ca:c001:10::4
 [A8.e] PC4-eth1: 	fd24:ec43:12ca:c001:20::4
 [A8.f] PC4-eth2:	fd24:ec43:12ca:c001:30::4
@@ -117,11 +116,10 @@ $ ping 10.10.10.4
 Q11/ Explain what happens.
 [A11]
 When pinging 10.10.10.4 from the host PC1:
-- PC1 sends an ARP request from its MAC address (da:bd:1f:e3:3b:35) ??? TO WHO??? asking “Who has 10.10.10.4? Tell 10.0.0.1”
-- It receives an ICMP message from 10.0.0.1 (itself?) saying “Destination unreachable (Host unreachable)”
-- PC4 gets a ARP request from da:bd:1f:e3:3b:35 asking “Who has 10.10.10.4? Tell 10.0.0.1”, but does not reply
+- PC1-eth0 broadcasts an ARP request asking “Who has 10.10.10.4? Tell 10.0.0.1”
+- PC4-eth0 gets a ARP broadcast from PC1-eth0 asking “Who has 10.10.10.4? Tell 10.0.0.1”, but does not reply, as the IP hosts haven’t been configured on each interface (with IP address of this interface, Mask of this interface, IP address of default router, IP address of DNS server)
+- Therefore the ping command fails with message “Destination unreachable (Host unreachable)”
 
-This is because the IP hosts haven’t been configured on each interface (with IP address of this interface, Mask of this interface, IP address of default router, IP address of DNS server)
 ——————————————————————————————————————
 
 
@@ -138,11 +136,10 @@ When pinging the link-local IPv6 address of PC4-eth0 interface (ping6 fe80::1038
 1) PC1-eth0 (fe80::d8bd:1fff:fee3:3b35) sends a Neighbor Solicitation (NS) packet for PC4-eth0 interface (fe80::1038:ebff:fe11:6d8c) to destination ff02::1:ff11:6d8c
 2) PC4-eth0 receives that NS packet from PC1-eth0
 3) PC4-eth0 sends backs an Neighbor Advertisement (NA) packet to PC1-eth0 (fe80::d8bd:1fff:fee3:3b35)
-4) PC1-eth0 receives the NA packet from PC4-eth0 (fe80::1038:ebff:fe11:6d8c)   —> fe80::1038:ebff:fe11:6d8c (sol, ovr) is at 12:38:eb:11:6d:8c
+4) PC1-eth0 receives the NA packet from PC4-eth0 (fe80::1038:ebff:fe11:6d8c)  
 5) PC1-eth0 can now ping request PC4-eth0 and PC4-eth0 can ping reply to PC1-eth0.
 
 Note: All of these exchange happen through ICMPv6 protocol.
-Note2: The exact same packets are captured in Wireshark from both PC1 and PC4.
 
 ——————————————————————————————————————
 
@@ -160,10 +157,10 @@ Q13/ Describe and explain the differences (if any) between the output from the t
 
 Q14/ Write down the routing table entries.
 [A14]
-# ip route 
+ip route 
 10.0.0.0/8 dev PC1-eth0 proto kernel scope link src 10.0.0.1
 
-# ip -6 route
+ip -6 route
 fe80::/64 dev PC1-eth0 proto kernel metric 256 pref medium
 
 ——————————————————————————————————————
@@ -175,13 +172,13 @@ Q15/ What are the routing table entries after assigning the new ip addresses?
 
 # ip -6 route
 fd24:ec43:12ca:c001:10::/80 dev PC1-eth0 proto kernel metric 256 pref medium
+fe80::/64 dev PC1eth0 proto kernel metric 256 pref medium
 
 ——————————————————————————————————————
 
 Q16/ For the IPv4 addresses assigned to PC1-eth0, identify the host and subnetwork portions. Why is it
 important for the PC to know this information?
 [A16]
-!!! toverify !!!
 Since we have a /24, the subnetwork portion is the first 24 bits (10.10.10), and the host portion is the remaining 8 bits (1).
 This information is important in order to be able to recognise which subnetwork the PC belongs to.
 
@@ -191,9 +188,8 @@ $ ping 10.10.10.4
 
 Q17/ What do you observe on Wireshark? Explain
 [A17]
-PC1 sends an ARP packet to the Broadcast destination asking “Who has 10.10.10.4? Tell 10.10.10.1”
-PC4 receives this message on its eth0 interface, but doesn’t reply.
-Why?
+PC1 broadcasts an ARP packet asking “Who has 10.10.10.4? Tell 10.10.10.1”
+PC4 receives this message on its eth0 interface, but doesn’t reply, as it doesn't posses the corresponding IPv4.
 
 ——————————————————————————————————————
 
@@ -201,7 +197,7 @@ Configure the interfaces of PC4 and the one of PC2 and PC3 according to the addr
 To verify the configuration, type:
 ip addr show
 
-ip addr add 10.10.10.1/24 dev PC1-eth0
+ip addr add 10.10.10.1/24 dev PC1-eth0	
 ip -6 addr add fd24:ec43:12ca:c001:10::1/80 dev PC1-eth0
 
 
@@ -225,7 +221,7 @@ PC4 ip -6 addr add fd24:ec43:12ca:c001:30::4/80 dev PC4-eth2
 
 Q18/ Does it work? Why?
 [A18]
-No, the network is unreachable, because it is not in the same LAN. Only the PC4 interface that is on the same LAN as PC1 is reachable. 
+In both cases this doesn't work because the IP addresses do not belong to the same subnet and there is no communication between the eth0 and eth1 interfaces of PC4.
 
 ——————————————————————————————————————
 
@@ -233,15 +229,13 @@ Q19/ Which command(s) you need to fix the problem?. On which PC did you apply th
 [A19]
 ip route add default via 10.10.30.4
 ip -6 route add default via fd24:ec43:12ca:c001:10::4
-
-I applied these commands on PC3
+We applied these commands on PC3 as we have to configure the default gateway of PC3, as the ping request are reaching LAN3 but there is no way out for the ping replies.
 
 ——————————————————————————————————————
 
 Q20/ Perform the following pings simultaneously: PC2 from PC1, PC3 from PC2, and PC1 from PC3.
 Comment on the round-trip times that you observe.
 [A20]
-
 PC1 —> PC2
 Rte min/avg/max/mdev = 0.064/0.101/0.290/0.053 ms
 
@@ -251,7 +245,7 @@ Rte min/avg/max/mdev = 0.075/0.131/0.475/0.106 ms
 PC3 —> PC1
 Rte min/avg/max/mdev = 0.053/0.093/0.0283/0.062ms
 
-They average times are all about a tenth of a millisecond.
+Their average times are all about a tenth of a millisecond.
 
 ——————————————————————————————————————
 
@@ -283,7 +277,7 @@ Q22/ Do a ping again from Alice to the malicious server and check in wireshark t
 packets. Write-down any difference in source and destination IP addresses.
 [A22]
 
-We observe that the Ping request destination IP address (malicious server) stays the same (10.10.30.3), but the source’s IP address of Alice’s computer (10.10.20.2) is replaced by the address of the Home router’s interface the packet is going out from: PC4-eth0 (10.10.30.4).
+We observe that the Ping request destination IP address (malicious server) stays the same (10.10.30.3), but the source’s IP address of Alice’s computer (10.10.20.2) is replaced by the address of the Home router’s interface the packet is going out from: PC4-eth0 (10.10.30.4). Therefore the malicious server believes to communicate with the Home router and has no clue that Alice is behind this ping request.
 
 ——————————————————————————————————————
 
@@ -291,7 +285,8 @@ Q23/ Do one more ping from Alice to the bank and check in wireshark the source a
 Based on your observations, what are the use cases for the “-j MASQUERADE” and “-j DNAT”
 configuration options?
 [A23]
-Even though we are pinging the Bank (10.10.10.1) from Alice’s computer (10.10.20.2), we are seeing packets being captured on PC3 (10.10.30.3).
+Alice believes to communicate with the bank but in reality she communicates with the malicious server. 
+The router captures the packet that have destination IP 10.10.10.1 (Bank) and rewrites the destination to be 10.10.30.3. It also makes sure that when the malicious server responds to Alice, that the source IP is changed back to the source IP of the bank.
 We can therefore induce that the iptables command we just executed on Alice’s home router reroutes packets that were destined to the Bank, to the malicious computer.
 Based on our observations the use cases are as follows:
  -j MASQUERADE is used to change the source address by replacing it with the address of the interface of the the router the packet is going out from. However, it doesn’t reroute the traffic. 
@@ -335,15 +330,20 @@ Q27/ Now, let us assume that there is a program at PC3 that modifies the traffic
 the bank. What should you change in current configuration on PC3 iptables in order to let the traffic come
 to the program that runs on PC3 host?
 [A27]
-
-# On PC4 (Home Router), we must add the port of the program that runs on PC3 to the DNAT -to-destination IP address of the following iptables command:
-iptables -t nat -A PREROUTING -s 10.10.20.2 -d 10.10.10.1 -j DNAT -to-destination 10.10.30.3:port_of_the_program
-
-# Then we delete the command where we replace the destination IP address of the malicious server’s (10.10.10.3) to the Bank (10.10.10.1)
-iptables -t nat -D PREROUTING -s 10.10.20.2 -d 10.10.30.3 -j DNAT -to-destination 10.10.10.1
-
-# TO VERIFY
+With the current PREROUTING rule, PC3 never gets the packets from Alice as they are instantly redirected to the gateway. 
+We should therefore remove the PREROUTING rule and implement the rule it in the program that modifies the traffic in PC3. 
+This would allow PC3 to receive the messages, read them and then re-send them with the correct source and destination IP.
 
 ——————————————————————————————————————
 
+Q28/ Can this attack be mounted by just tampering the ip routing table of Alice’s home router (PC4)?
+[A28]
+Yes, as long as there is a program on PC3 that modifies the incoming traffic according to the rules defined in A25.
+
+——————————————————————————————————————
+
+Q29/ In our lab environment, is there any way (other than checking Alice’s empty bank account) that Alice
+could notice that she is under attack?
+[A29]
+The only way that Alice could notice that she is under attack is if she checks her Home router’s routing table and see that the traffic to the bank is redirected to the malicious server.
 
