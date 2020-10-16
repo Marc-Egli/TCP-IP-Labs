@@ -1,0 +1,192 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-BoldOblique;
+\f3\fswiss\fcharset0 Helvetica-Oblique;\f4\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red127\green127\blue127;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c57046\c57047\c57046;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww27360\viewh14740\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs36 \cf0 COM-407: TCP/IP NETWORKING
+\f1\b0\fs24 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+
+\fs28 LAB EXERCISES (TP) 2
+\fs24 \
+
+\fs28 L2 V.S. L3, NAT, PHYSICAL CONNECTION, AND TROUBLESHOOTING
+\fs24 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\i\b \cf0 \
+\
+\
+Q1/ How many LANs are there in the figure?\
+\pard\pardeftab720\partightenfactor0
+
+\f1\i0\b0 \cf0 [A1]
+\f2\i\b \
+
+\f1\i0\b0 There is one LAN but 2 subnets: 10.0.0.0/24 and 10.0.0.4/31
+\f2\i\b \
+\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
+
+\f1\i0\b0 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\partightenfactor0
+
+\f2\i\b \cf0 \
+Q2/ What are the IPv6 addresses of all hosts? What kind of addresses are these?\
+\pard\pardeftab720\partightenfactor0
+
+\f1\i0\b0 \cf0 [A2]
+\f2\i\b \
+
+\f1\i0\b0 h1 IPv6 addr =  fe80::68df:73ff:feaa:ed3b	/64\
+h2 IPv6 addr =  fe80::28a9:e4ff:fea5:3e2e	/64\
+h3 IPv6 addr =  fe80::483f:17ff:fe2f:eb3	/64\
+h4 IPv6 addr =  fe80::4cda:b8ff:feaf:c545	/64
+\fs46 \
+
+\fs24 \
+Those are all Link local addresses (fe80::/10), which means they can only be used between systems on the same LAN.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Q3/ Which hosts do not receive ping-reply? Explain.
+\f1\b0 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\i \cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf2 H1 \'97> h2, h3, h4\
+H2 \'97> h1, h3, h4\
+H3 \'97> h1, h2, h4\
+H4 \'97> h1, h2, 13\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b \cf2 h1 ping h3\
+(Capture on h1)\
+\pard\pardeftab720\partightenfactor0
+
+\f3\b0 \cf2 ping -I h1-eth0 fe80::483f:17ff:fe2f:eb3\
+\
+No.     Time           Source                		Destination           		Protocol 	Length	 Info\
+      1 0.000000000    fe80::68df:73ff:feaa:ed3b 	ff02::1:ff2f:eb3      		ICMPv6   	86     		
+\f2\b Neighbor Solicitation
+\f3\b0  for fe80::483f:17ff:fe2f:eb3 from 6a:df:73:aa:ed:3b\
+      2 0.036858280    fe80::483f:17ff:fe2f:eb3 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	86     		
+\f2\b Neighbor Advertisement
+\f3\b0  fe80::483f:17ff:fe2f:eb3 (sol, ovr) is at 4a:3f:17:2f:0e:b3\
+      3 0.036898155    fe80::68df:73ff:feaa:ed3b 	fe80::483f:17ff:fe2f:eb3 	ICMPv6   	118    		
+\f2\b Echo (ping) request
+\f3\b0  id=0x0f80, seq=1, hop limit=64 (reply in 4)\
+      4 0.054001843    fe80::483f:17ff:fe2f:eb3 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	118   	 	
+\f2\b Echo (ping) reply
+\f3\b0  id=0x0f80, seq=1, hop limit=64 (request in 3)\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\b \cf2 h1 ping h4\
+(Capture on h4)
+\f3\b0 \
+No.     Time           	Source                		Destination           		Protocol 	Length 	Info\
+      1 0.000000000    fe80::68df:73ff:feaa:ed3b 	ff02::1:ffaf:c545     		ICMPv6   	86     		Neighbor Solicitation for fe80::4cda:b8ff:feaf:c545 from 6a:df:73:aa:ed:3b\
+      2 0.000024119    fe80::4cda:b8ff:feaf:c545 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	86     		Neighbor Advertisement fe80::4cda:b8ff:feaf:c545 (sol, ovr) is at 4e:da:b8:af:c5:45\
+      3 0.022251330    fe80::68df:73ff:feaa:ed3b 	fe80::4cda:b8ff:feaf:c545 	ICMPv6   	118    		Echo (ping) request id=0x1050, seq=1, hop limit=64 (reply in 4)\
+      4 0.022269430    fe80::4cda:b8ff:feaf:c545 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	118    		Echo (ping) reply id=0x1050, seq=1, hop limit=64 (request in 3)
+\f1\i0 \cf0 \
+\
+[A3]\
+All hosts receive ping replies. \
+This is because IPv6 hosts automatically assign a link-local address to each of their IPv6-enabled interface (Stateless Address Autoconfiguration), which enables the hosts on the same network to communicate.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Q4/ Describe the different types of packets observed on h1, h2, h3 and h4.\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0 \cf0 [A4]\
+Every host receives the ARP packet asking \'93Who has 10.0.0.2? Tell 10.0.0.1\'94, that was broadcasted by h1 (6a:df:73:aa:ed:3b), however, only h2 replies to h1 by sending its MAC address (10.10.0.2 is at 2a:a9:e4:a5:3e:2e), as it is the only one that has the IP address 10.0.0.2.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b \cf0 Q5/ Compare the packets sent by h1 to the ones received by h3, specifically at source/destination MACaddresses.\
+Explain the similarities and differences, if any.\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b0 \cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f3\i \cf2 $ ping 10.0.0.3\
+1	0.000000000	6a:df:73:aa:ed:3b	Broadcast	ARP	42	Who has 10.0.0.3? Tell 10.0.0.1\
+2	0.019249269	4a:3f:17:2f:0e:b3	6a:df:73:aa:ed:3b	ARP	42	10.0.0.3 is at 4a:3f:17:2f:0e:b3\
+3	0.019256694	10.0.0.1	10.0.0.3	ICMP	98	Echo (ping) request  id=0x1798, seq=1/256, ttl=64 (reply in 4)\
+4	0.032193059	10.0.0.3	10.0.0.1	ICMP	98	Echo (ping) reply    id=0x1798, seq=1/256, ttl=64 (request in 3)
+\f1\i0 \cf0 \
+\
+[A5]\
+Whether they are exchanged through the ARP or the ICMP protocols, the packets sent by h1 are exactly the same as the ones received by h3, and vice versa.\
+This makes sense because, since h1 and h3 exchange packets between each another, they both see the same packets:\
+\
+Packet 1: This is the ARP request: the source is h1-eth0\'92s MAC address (6a:df:73:aa:ed:3b) and the destination is Broadcast (all hosts receive this packet), since h1 doesn\'92t know yet who has IP 10.0.0.3.\
+Packet 2: Since h3 has the IP requested in the ARP request (10.0.0.3), it replies to the source of the ARP request, which becomes the destination of the reply: h1-eth0\'92s MAC address (6a:df:73:aa:ed:3b). h1 receives this packet.\
+Packet 3: Now that h1 has h3 IP address, it can send ICMP echo (ping) request to destination h3, which h3 receives.\
+Packet 4: h3 replies to h1 by sending ICMP echo (ping) reply, which h1 receives.\
+Steps 3 and 4 keep repeating until we stop the ping program.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+Q6/ Ping from h4 to h1 using IPv4. Observe the traffic captured and explain your findings.\
+[A6]\
+The ping command yields a connection error: \
+connect: Network is unreachable\
+This is because they h1 and h4 are not in the same subnet. Since there are no routers and only switches between h1 and h4, no one can forward that packet.\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\partightenfactor0
+
+\f4 \cf3 \expnd0\expndtw0\kerning0
+\
+\pard\pardeftab720\partightenfactor0
+
+\f2\i\b \cf0 \kerning1\expnd0\expndtw0 Q7/ Fix the configuration issue with host h4. What commands did you execute?
+\f1\i0\b0 \
+[A7]\
+On the host h4, we execute the following commands:\
+ip addr add 10.0.0.4/24 dev h4-eth0\
+ip addr del 10.0.0.4/31 dev h4-eth0\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f2\i\b \cf0 Q8/ What is the benefit of IPv6 over IPv4? Explain your answer based on your findings in previous questions.
+\f1\i0\b0 \
+[A8]\
+With IPv6, you don\'92t have to configure DHCP servers, or manually assign IP addresses to hosts: IPv6 hosts configure themselves automatically, thanks to SLAAC (Stateless Address Autoconfiguration). IPv6 hosts automatically assign a link-local address to each of their IPv6-enabled interface, which enables the hosts on the same network to communicate.\
+\
+\
+\
+\
+\
+}
