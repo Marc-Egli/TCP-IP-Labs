@@ -1,0 +1,377 @@
+COM-407: TCP/IP NETWORKING
+
+LAB EXERCISES (TP) 2
+L2 V.S. L3, NAT, PHYSICAL CONNECTION, AND TROUBLESHOOTING
+
+
+
+2. LAYER 2 VS. LAYER 3 NETWORKING
+
+
+
+2.1 USING A SWITCH AS A NETWORKING DEVICE
+
+
+Q1/ How many LANs are there in the figure?
+[A1]
+There is one LAN but 2 subnets: 10.0.0.0/24 and 10.0.0.4/31
+
+
+——————————————————————————————————————
+
+Q2/ What are the IPv6 addresses of all hosts? What kind of addresses are these?
+[A2]
+h1 IPv6 addr =  fe80::68df:73ff:feaa:ed3b/64
+h2 IPv6 addr =  fe80::28a9:e4ff:fea5:3e2e/64
+h3 IPv6 addr =  fe80::483f:17ff:fe2f:eb3/64
+h4 IPv6 addr =  fe80::4cda:b8ff:feaf:c545/64
+
+Those are all Link local addresses (fe80::/10), which means they can only be used between systems on the same LAN.
+
+——————————————————————————————————————
+
+Q3/ Which hosts do not receive ping-reply? Explain.
+
+H1 —> h2, h3, h4
+H2 —> h1, h3, h4
+H3 —> h1, h2, h4
+H4 —> h1, h2, 13
+
+h1 ping h3
+(Capture on h1)
+ping -I h1-eth0 fe80::483f:17ff:fe2f:eb3
+
+No.     Time           Source                		Destination           		Protocol 	Length	 Info
+      1 0.000000000    fe80::68df:73ff:feaa:ed3b 	ff02::1:ff2f:eb3      		ICMPv6   	86     		Neighbor Solicitation for fe80::483f:17ff:fe2f:eb3 from 6a:df:73:aa:ed:3b
+      2 0.036858280    fe80::483f:17ff:fe2f:eb3 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	86     		Neighbor Advertisement fe80::483f:17ff:fe2f:eb3 (sol, ovr) is at 4a:3f:17:2f:0e:b3
+      3 0.036898155    fe80::68df:73ff:feaa:ed3b 	fe80::483f:17ff:fe2f:eb3 	ICMPv6   	118    		Echo (ping) request id=0x0f80, seq=1, hop limit=64 (reply in 4)
+      4 0.054001843    fe80::483f:17ff:fe2f:eb3 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	118   	 	Echo (ping) reply id=0x0f80, seq=1, hop limit=64 (request in 3)
+
+h1 ping h4
+(Capture on h4)
+No.     Time           	Source                		Destination           		Protocol 	Length 	Info
+      1 0.000000000    fe80::68df:73ff:feaa:ed3b 	ff02::1:ffaf:c545     		ICMPv6   	86     		Neighbor Solicitation for fe80::4cda:b8ff:feaf:c545 from 6a:df:73:aa:ed:3b
+      2 0.000024119    fe80::4cda:b8ff:feaf:c545 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	86     		Neighbor Advertisement fe80::4cda:b8ff:feaf:c545 (sol, ovr) is at 4e:da:b8:af:c5:45
+      3 0.022251330    fe80::68df:73ff:feaa:ed3b 	fe80::4cda:b8ff:feaf:c545 	ICMPv6   	118    		Echo (ping) request id=0x1050, seq=1, hop limit=64 (reply in 4)
+      4 0.022269430    fe80::4cda:b8ff:feaf:c545 	fe80::68df:73ff:feaa:ed3b 	ICMPv6   	118    		Echo (ping) reply id=0x1050, seq=1, hop limit=64 (request in 3)
+
+[A3]
+All hosts receive ping replies. 
+This is because IPv6 hosts automatically assign a link-local address to each of their IPv6-enabled interface (Stateless Address Autoconfiguration), which enables the hosts on the same network to communicate.
+
+——————————————————————————————————————
+
+Q4/ Describe the different types of packets observed on h1, h2, h3 and h4.
+[A4]
+Every host receives the ARP packet asking “Who has 10.0.0.2? Tell 10.0.0.1”, that was broadcasted by h1 (6a:df:73:aa:ed:3b), however, only h2 replies to h1 by sending its MAC address (10.10.0.2 is at 2a:a9:e4:a5:3e:2e), as it is the only one that has the IP address 10.0.0.2.
+
+——————————————————————————————————————
+
+Q5/ Compare the packets sent by h1 to the ones received by h3, specifically at source/destination MACaddresses.
+Explain the similarities and differences, if any.
+
+$ ping 10.0.0.3
+1	0.000000000	6a:df:73:aa:ed:3b	Broadcast	ARP	42	Who has 10.0.0.3? Tell 10.0.0.1
+2	0.019249269	4a:3f:17:2f:0e:b3	6a:df:73:aa:ed:3b	ARP	42	10.0.0.3 is at 4a:3f:17:2f:0e:b3
+3	0.019256694	10.0.0.1	10.0.0.3	ICMP	98	Echo (ping) request  id=0x1798, seq=1/256, ttl=64 (reply in 4)
+4	0.032193059	10.0.0.3	10.0.0.1	ICMP	98	Echo (ping) reply    id=0x1798, seq=1/256, ttl=64 (request in 3)
+
+[A5]
+Whether they are exchanged through the ARP or the ICMP protocols, the packets sent by h1 are exactly the same as the ones received by h3, and vice versa.
+This makes sense because, since h1 and h3 exchange packets with one another, they both see the same packets:
+
+Packet 1: This is the ARP request: the source is h1-eth0’s MAC address (6a:df:73:aa:ed:3b) and the destination is Broadcast (all hosts receive this packet), since h1 doesn’t know yet who has IP 10.0.0.3.
+Packet 2: Since h3 has the IP address 10.0.0.3 that was requested in the ARP request, it replies to the source of the ARP request, which becomes the destination of the reply: h1-eth0’s MAC address (6a:df:73:aa:ed:3b). h1 receives this packet.
+Packet 3: Now that h1 knows h3 IP address, it can send ICMP echo (ping) request to destination h3, which h3 receives.
+Packet 4: h3 replies to h1 by sending ICMP echo (ping) reply, which h1 receives.
+The echo request and reply keep repeating until we stop the ping program.
+
+——————————————————————————————————————
+
+Q6/ Ping from h4 to h1 using IPv4. Observe the traffic captured and explain your findings.
+[A6]
+The ping command yields a connection error: “connect: Network is unreachable”
+This is because h1 and h4 are not in the same subnet. Since there are no routers but only switches between h1 and h4, no device can forward that packet.
+
+——————————————————————————————————————
+
+Q7/ Fix the configuration issue with host h4. What commands did you execute?
+[A7]
+On the host h4, we execute the following commands:
+ip addr add 10.0.0.4/24 dev h4-eth0
+ip addr del 10.0.0.4/31 dev h4-eth0
+
+——————————————————————————————————————
+
+Q8/ What is the benefit of IPv6 over IPv4? Explain your answer based on your findings in previous questions.
+[A8]
+With IPv6, you don’t have to configure DHCP servers, or manually assign IP addresses to hosts: IPv6 hosts configure themselves automatically using SLAAC (Stateless Address Autoconfiguration). IPv6 hosts automatically assign a link-local address to each of their IPv6-enabled interface, which enables the hosts on the same network to communicate.
+
+——————————————————————————————————————
+
+2.2 CONFIGURE A SWITCH TO HANDLE LOOPS
+
+
+Q9/ What is the percentage of dropped packets? Why does it happen?
+[A9]
+100% of the packets dropped (0/12 received).
+Explain why
+——————————————————————————————————————
+
+Q10/ What is the percentage of dropped packets when using IPv6 address? Why does it happen?
+[A10]
+100% of the packets dropped.
+Explain why
+
+——————————————————————————————————————
+
+Q11/ What does the spanning tree protocol achieve?
+[A11]
+The Spanning Tree Protocol Forces the Active Topology to be Loop‐free, i.e. to be a Tree. To do this, it de‐activate some ports such that the remaining topology is a tree that spans all bridges and adapts to failures and additions.
+
+——————————————————————————————————————
+
+Q12/ Write down the path of the packets for each pair of hosts.
+[A12]
+
+From h1 to h3:
+h1 —> s1 —> s3 —> s2 —> h3
+
+From h3 to h4:
+h3 —> s2 —> s3 —> h4
+
+From h2 to h4:
+h2 —> s1 —>  s3 —> h4
+
+
+——————————————————————————————————————
+
+
+Q13/ Are the hosts following the shortest path to send their packets to the destinations? Explain.
+[A13]
+No, they follow the path specified by the Spanning Tree Protocol (STP). In our case, the STP elected s3 as the root, and therefore breaks the link between s1 and s2. 
+
+——————————————————————————————————————
+link s1 s3 down
+After 5 minutes:
+From h1 to h3:
+h1 —> s1 —> s2 —> h3
+
+From h3 to h4:
+h3 —> s2 —> s3 —> h4
+
+From h2 to h4:
+h2 —> s1 —>  s2 —> s3 —> h4
+
+
+
+Q14/ Write down the status (enabled or disabled) of each link between the switches. How did STP react
+when the link broke down? Explain.
+[A14]
+link s1 s2 enabled
+link s1 s3 disabled
+link s2 s3 enabled
+
+As part of the Spanning Tree Protocol, the bridges monitor that the root is reachable and if not, trigger re-computation of a new spanning tree.
+Since we manually broke the link between s1 and s3, the Spanning Tree Protocol adapted to that failure by re-computing a new spanning tree.
+
+
+Q15/ Write down again the path of the packets for each pair of Q12. 
+[A15]
+h1 —> s1 —> s2 —> h3
+
+From h3 to h4:
+h3 —> s2 —> s3 —> h4
+
+From h2 to h4:
+h2 —> s1 —>  s2 —> s3 —> h4
+
+
+
+2.3 USING A ROUTER AS A NETWORKING DEVICE
+
+
+With IPv4:
+
+mininet> pingall
+*** Ping: testing ping reachability
+h1 -> X X X X X X 
+h2 -> X X X X X X 
+h3 -> X X X X X X 
+h4 -> X X X X X X 
+r1 -> X X X X X X 
+r2 -> X X X X X X 
+r3 -> X X X X X X 
+*** Results: 100% dropped (0/42 received)
+
+
+With IPv6:
+
+When pinging from h1, h2 and h3, I get 3 different issues
+
+h1# ping6 2020::4:2
+PING 2020::4:2(2020::4:2) 56 data bytes
+—> echo request but no response found!
+
+h2# ping6 2020::4:2
+connect: Network is unreachable
+
+h3# ping6 2020::4:2
+From 2020::3:1 icmp_seq=1 Destination unreachable: No route
+
+h4# ping6 2020::1:2
+PING 2020::4:2(2020::4:2) 56 data bytes
+—> echo request but no response found!
+
+
+Q16/ Ping all hosts from each other using IPv4 and IPv6. Which hosts are unable to reach one another?
+[A16]
+All the hosts are unable to reach one another
+
+——————————————————————————————————————
+
+Q17/ What are the interfaces and respective IP addresses (v4 and v6) of the router r1?
+[A17]
+r1-eth0: 
+10.0.1.1/24
+2020::1:1/112
+
+r1-eth1
+10.0.2.1/24
+2020::2:1/112
+
+r1-eth2
+10.0.5.1/24
+2020::5:1/112
+
+r1-eth3
+10.0.7.1/24
+2020::7:1/112
+
+
+Q18/ Can you spot any misconfiguration in the file? (Hint: Take a look at the configurations of h2, r1 and
+r2.)
+[A18]
+- IP forwarding is not enabled on r1 (neither for IPv4 or IPv6)
+- There is no routing table for r2 —> no default gateway configuration?
+- h2 default route is set via 10.5.0.100, which is not connected to h2
+
+——————————————————————————————————————
+
+Q19/ What is the command you used at r1?
+[A19]
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
+
+——————————————————————————————————————
+
+
+Q20/ Which hosts are still unable to ping each other?
+[A20]
+Every host except from h1 and h4, which are the only hosts that are able to ping each another.
+
+——————————————————————————————————————
+
+Q21/ What are the commands you used in h2 to achieve this?
+[A21]
+On h2, we add an IPv4 and IPv6 default route (i.e., “configure default gateway”) with the following commands:
+ip route add default via 10.0.2.1
+ip -6 route add default via 2020::2:1
+
+——————————————————————————————————————
+
+Q22/ Try again to ping hosts from each other with IPv4 and IPv6 addresses. Is there any change in ping
+results?
+[A22]
+Yes, h1, h2 and h4 are able to ping each other, however h3 is still unable to ping or receive ping requests from the other hosts.
+
+——————————————————————————————————————
+
+Q22/ Try again to ping hosts from each other with IPv4 and IPv6 addresses. Is there any change in ping
+results?
+[A22]
+Yes, h1, h2 and h4 are able to ping each other, however h3 is still unable to ping or receive ping requests from the other hosts.
+
+——————————————————————————————————————
+
+mininet> r2 ip route show
+10.0.3.0/24 dev r2-eth0 proto kernel scope link src 10.0.3.1 
+10.0.5.0/24 dev r2-eth1 proto kernel scope link src 10.0.5.2 
+10.0.6.0/24 dev r2-eth2 proto kernel scope link src 10.0.6.1 
+
+mininet> r2 ip -6 route show
+2020::3:0/112 dev r2-eth0 proto kernel metric 256 pref medium
+2020::5:0/112 dev r2-eth1 proto kernel metric 256 pref medium
+2020::6:0/112 dev r2-eth2 proto kernel metric 256 pref medium
+fe80::/64 dev r2-eth1 proto kernel metric 256 pref medium
+fe80::/64 dev r2-eth0 proto kernel metric 256 pref medium
+fe80::/64 dev r2-eth2 proto kernel metric 256 pref medium
+
+
+Q23/ Now, check the routing table of r2 for IPv4 addresses. What is the problem with it?
+[A23]
+The only entries in the IPv4 routing table for r2 are: 10.0.3.0/24, 10.0.5.0/24, and 10.0.6.0/24, with a scope of link. Those addresses correspond to the subnets which r2 belongs to.
+However, h1, h2 and h4 are not on the specified subnets, and there are no entries for gateways to h1, h2 and h4 respective subnets in r2’s routing table. Therefore, there is no way to reach h1, h2 or h4 through r3.
+
+——————————————————————————————————————
+
+Q24/ Solve the issue in r2. What commands do you use?
+[A24]
+ip route add 10.0.1.0/24 via 10.0.5.1  # to be able to reach h1
+ip route add 10.0.2.0/24 via 10.0.5.1  # to be able to reach h2
+ip route add 10.0.4.0/24 via 10.0.6.2  # to be able to reach h4
+
+——————————————————————————————————————
+
+Q25/ Check the routing table for IPv6 addresses. Is there any problem with it? Write down the commands
+to solve it.
+[A25]
+Yes, the problem is that there are no routes defined to reach the subnets that h1, h2 and h4 belong to, respectively 2020::1:0/112, 2020::2:0/112 and 2020::4:0/112. To solve it, we add these subnets IPv6 routes through their respective gateways with the following syntax: ip -6 route add <ipv6network>/<prefixlength> via <ipv6address>
+
+ip -6 route add 2020::1:0/112 via 2020::5:1
+ip -6 route add 2020::2:0/112 via 2020::5:1
+ip -6 route add 2020::4:0/112 via 2020::6:2
+
+——————————————————————————————————————
+
+Q26/ How do they differ in subnet mask and IP address assignment (IPv4 and IPv6)?
+[A26]
+
+
+——————————————————————————————————————
+
+
+mininet> r2 ip route show
+mininet> r2 ip -6 route show
+10.0.1.0/24 via 10.0.5.1 dev r2-eth1 
+10.0.2.0/24 via 10.0.5.1 dev r2-eth1 
+10.0.3.0/24 dev r2-eth0 proto kernel scope link src 10.0.3.1 
+10.0.4.0/24 via 10.0.6.2 dev r2-eth2 
+10.0.5.0/24 dev r2-eth1 proto kernel scope link src 10.0.5.2 
+10.0.6.0/24 dev r2-eth2 proto kernel scope link src 10.0.6.1
+
+2020::1:0/112 via 2020::5:1 dev r2-eth1 metric 1024 pref medium
+2020::2:0/112 via 2020::5:1 dev r2-eth1 metric 1024 pref medium
+2020::3:0/112 dev r2-eth0 proto kernel metric 256 pref medium
+2020::4:0/112 via 2020::6:2 dev r2-eth2 metric 1024 pref medium
+2020::5:0/112 dev r2-eth1 proto kernel metric 256 pref medium
+2020::6:0/112 dev r2-eth2 proto kernel metric 256 pref medium
+fe80::/64 dev r2-eth1 proto kernel metric 256 pref medium
+fe80::/64 dev r2-eth0 proto kernel metric 256 pref medium
+fe80::/64 dev r2-eth2 proto kernel metric 256 pref medium
+
+
+Q27/ How do they differ in creating routing/forwarding tables?
+[A27]
+IPv6 routing tables contain the link local addresses of the interfaces 
+
+——————————————————————————————————————
+
+Q28/ How do they differ in performance/efficiency in a network with loops?
+[A28]
+
+
+
+——————————————————————————————————————
+
+
