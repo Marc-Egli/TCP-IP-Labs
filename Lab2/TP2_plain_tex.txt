@@ -370,8 +370,131 @@ IPv6 routing tables contain the link local addresses of the interfaces
 Q28/ How do they differ in performance/efficiency in a network with loops?
 [A28]
 
+From h1, h2 and h3 to h4:
+
+mininet> h4 iperf -s
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+[  4] local 10.0.4.2 port 5001 connected with 10.0.1.2 port 59666
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.0 sec  25.7 GBytes  22.0 Gbits/sec
+[  4] local 10.0.4.2 port 5001 connected with 10.0.2.2 port 40510
+[  4]  0.0-10.0 sec  25.9 GBytes  22.2 Gbits/sec
+[  4] local 10.0.4.2 port 5001 connected with 10.0.3.2 port 50652
+[  4]  0.0-10.0 sec  26.4 GBytes  22.6 Gbits/sec
+
+
+From h1, h3 and h4 to h2:
+
+mininet> h2 iperf -s
+xterm: No absolute path found for shell: false'
+------------------------------------------------------------
+Server listening on TCP port 5001
+TCP window size: 85.3 KByte (default)
+------------------------------------------------------------
+[  4] local 10.0.2.2 port 5001 connected with 10.0.1.2 port 35552
+[ ID] Interval       Transfer     Bandwidth
+[  4]  0.0-10.0 sec  28.0 GBytes  24.1 Gbits/sec
+[  4] local 10.0.2.2 port 5001 connected with 10.0.3.2 port 52424
+[  4]  0.0-10.0 sec  26.7 GBytes  22.9 Gbits/sec
+[  4] local 10.0.2.2 port 5001 connected with 10.0.4.2 port 59042
+[  4]  0.0-10.0 sec  24.7 GBytes  21.2 Gbits/sec
 
 
 ——————————————————————————————————————
+——————————————————————————————————————
+——————————————————————————————————————
+
+
+3. CONNECTING VIRTUAL ENVIRONMENT TO THE REAL WORLD 
+    USING NETWORK ADDRESS TRANSLATION (NAT)
+
+
+
+Flush the interface of the VM connected to NAT:
+# sudo ip addr flush dev enp0s3
+
+3.1 CONNECTING THE PERIMETER ROUTER TO THE INTERNET
+
+To perform the bridging between physical and virtual network-adapters, connect the interface of the VM to the switch s3:
+mininet> sh ovs-vsctl add-port s3 enp0s3
+
+
+——————————————————————————————————————
+
+
+Q29/ What is the IPv4 address allocated by the DHCP server of VirtualBox to r1-eth1? Is it a private
+address or public one? What is the IPv4 address of the DHCP server? Hint: You can use Wireshark and to
+capture the packets when asking for an IP address from DHCP.
+[A29]
+- The IPv4 address allocated by the DHCP server of VirtualBox to r1-eth1 is 10.0.2.16/24. It is a private address, as it is part of the 10.0.0.0/8 address range, which cannot be used on the public Internet.
+- The IPv4 address of the DHCP server is 10.0.2.2 (= source IP address of the DHCP ACK packet sent to r1)
+
+ 
+
+
+3.2 PROVIDING INTERNET ACCESS TO MININET HOSTS
+
+Q30/ The perimeter router r1 has one interface that is connected to the Internet. Imagine that we setup r1
+as a router and use it to connect h1 and h2 to the Internet. Which problems does this create ?
+[A30]
+In order to connect h1 and h2 to the Internet, we need 2 IP addresses. However, since the router r1 has only 1 interface connected to the Internet, both h1 and h2 won’t be able to connect to the Internet.
+
+——————————————————————————————————————
+
+Goal of NAT: allow 𝑛 > 1 devices to use one single IP address.
+
+NAT translates ( = masquerades ) internal IP address and internal port number into NAT IP address and NAT port number
+Outside sees only NAT IP address and NAT port
+NAT forwarding is based on exact matching in NAT table Implemented by iptables in Linux
+
+Q31/ Propose the iptables -t nat command you need to properly configure r1 to this end.
+[A31]
+iptables -t nat -A POSTROUTING -o r1-eth1 -j MASQUERADE
+
+——————————————————————————————————————
+ICMP message will include the source and destination ports of the discarded UDP packet.
+
+Q32/ When doing traceroute from h2, what is the difference in the packets captured on r1’s eth0 and
+eth1?
+[A32]
+
+When the packets go out with UDP, the source address changes from 10.0.0.2 when captured on r1-eth0 to 10.0.2.16 when captured on r1-eth1. The time to live is also decreased by 1.
+When the packets come back with ICMP, the destination address changes from 10.0.2.16 when captured on r1-eth1 to 10.0.0.2 when captured on r1-eth0. The time to live also decreases by 1. 
+
+——————————————————————————————————————
+
+Q33/ Focus on the traceroute from r1. What is the difference in the packets as compared to h2?
+[A33]
+There are no packets captured on r1-eth0 since no packets are coming from h1 nor h2.
+Since the packets are not being forwarded but sent directly from r1, the packets being sent from r1 all have the same source address 10.0.2.16 (r1-eth1) and the packets coming back with ICMP all have the same destination address 10.0.2.16 (r1-eth1).
+
+——————————————————————————————————————
+
+Q34/ Which field in the UDP packet is used to identify the (local) source IP address of h2 in order to
+properly forward incoming ICMP replies back to it?
+[A34]
+UDP source port
+
+——————————————————————————————————————
+
+Q35/ What is the difference in the request ICMP packets captured between packets sent from h1 and packets
+sent from r1 when capturing on the exit interface of each?
+[A35]
+When capturing packets at r1-eth1, the difference between packets sent from h1 and packets sent from r1 is the value of the ICMP Identifier field. (the source and destination IP have the same values in both cases).
+What actually happens with the packets sent from h1 is that they are being forwarded by r1 (NAT) while masquerading the source IP address of h1-eth0 with r1-eth1’s IP address. The ICMP header contains an ICMP Identifier field to identify the local source of the packet and be able to send the reply back to the right host.
+The path of the packets goes like this:  h1 —> r1, r1 —> google, google —> r1, r1 —> h1).
+
+——————————————————————————————————————
+
+Q36/ Conclude how the incoming ICMP replies are forwarded back to h1 when doing ping from h1. In
+particular, which field in the request/reply ICMP packets was used to identify the (local) source IP address?
+[A36]
+For ICMP Echo requests and replies, the ICMP Identifier (visible in Big Endian (BE) and Little Endian (LE) format in Wireshark) is used to identify the local source IP address.
+
+
+
 
 
