@@ -3,12 +3,12 @@
 \f3\fswiss\fcharset0 Helvetica-Oblique;\f4\froman\fcharset0 Times-Roman;\f5\fnil\fcharset0 STIXGeneral-Regular;
 }
 {\colortbl;\red255\green255\blue255;\red255\green255\blue255;\red5\green61\blue204;\red0\green0\blue0;
-\red71\green204\blue252;\red0\green0\blue255;\red127\green127\blue127;\red255\green255\blue10;\red127\green127\blue127;
-\red255\green255\blue10;\red0\green0\blue255;\red191\green191\blue191;\red253\green128\blue8;}
+\red71\green204\blue252;\red0\green0\blue255;\red127\green127\blue127;\red255\green255\blue10;\red191\green191\blue191;
+\red253\green128\blue8;}
 {\*\expandedcolortbl;;\cssrgb\c100000\c100000\c100000;\cssrgb\c0\c33896\c83855;\cssrgb\c0\c0\c0;
-\cssrgb\c32483\c83691\c99157;\cssrgb\c1680\c19835\c100000;\cssrgb\c57046\c57047\c57046;\cssrgb\c99942\c98555\c0;\cssrgb\c57046\c57047\c57046;
-\cssrgb\c99942\c98555\c0;\cssrgb\c1680\c19835\c100000;\csgray\c79525;\cssrgb\c100000\c57637\c0;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww20040\viewh21620\viewkind0
+\cssrgb\c32483\c83691\c99157;\cssrgb\c1680\c19835\c100000;\cssrgb\c57046\c57047\c57046;\cssrgb\c99942\c98555\c0;\csgray\c79525;
+\cssrgb\c100000\c57637\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww22400\viewh21620\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\b\fs38 \cf0 MARC 5, 26, 28, 30, 35 + bonus\
@@ -84,6 +84,7 @@ h4 IPv6 addr =  fe80::4cda:b8ff:feaf:c545/64
 Those are all Link local addresses, which means they can only be used between systems on the same LAN.\
 \
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 The IPv6 addresses of all hosts are link local addresses generate from there MAC address :\
 h1 :  fe80::5879:90ff:fefc:55d6\
 h2 : fe80::ff:54ff:fe70:8879\
@@ -145,7 +146,9 @@ All hosts receive ping replies. \
 This is because IPv6 hosts automatically assign a link-local address to each of their IPv6-enabled interface (Stateless Address Autoconfiguration), which enables the hosts on the same LAN to communicate.\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf6 Every host receives a ping reply from everyone. This comes from the fact that the ping6 uses the link local addresses which can cross LAN's\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \pard\pardeftab720\partightenfactor0
 \cf0 \
@@ -159,10 +162,12 @@ Every host receives the ARP packet asking \'93Who has 10.0.0.2? Tell 10.0.0.1\'9
 Then h1 sends ICMP Echo (ping) request packets to h2, which then replies with ICMP Echo (ping) reply packets.\
 \
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 h4 receives no packet.\
 h3 receives an ARP broadcast requesting the MAC address of h2 and doesn't respond as expected.\
 h2 receives the same ARP broadcast from h1 requesting for h2 MAC address. h2 responds with his MAC address. Then h1 sends ping request packets to h2 (ICMP). h2 then emits an ARP broadcast to find out the MAC address of h1. h1 responds and h2 starts sending replies.\
 \
+\pard\pardeftab720\partightenfactor0
 \cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
@@ -199,7 +204,9 @@ Packet 4: h3 replies to h1 by sending ICMP echo (ping) reply, which h1 receives.
 The echo request and reply keep repeating until we stop the ping program.\
 \
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 First h1 emits an ARP broadcast to query the MAC address of h3. H3 receives this demand and replies. After that h1 sends ping requests to h3. h3 needs to know the MAC address of h1 to respond and therefor emits an ARP broadcast to query the MAC address of h1. h1 responds which allows h3 to send ping replies to h1\
+\pard\pardeftab720\partightenfactor0
 \cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
@@ -211,15 +218,18 @@ The echo request and reply keep repeating until we stop the ping program.\
 \pard\pardeftab720\partightenfactor0
 
 \f1\i0\b0 \cf0 [A6]\
-\cf9 The ping command yields a connection error: \'93connect: Network is unreachable\'94\
+\pard\pardeftab720\partightenfactor0
+\cf7 The ping command yields a connection error: \'93connect: Network is unreachable\'94\
 This is because h1 and h4 are not in the same subnet. Since there are no routers but only switches between h1 and h4, no device can forward that packet.\cf0 \
 \
 The ping command yields a connection error: \'93connect: Network is unreachable\'94\
 Since h1 and h4 are not in the same subnet and h4 doesn\'92t have a default gateway, it cannot reach the subnet of h1 and thus doesn\'92t send anything. \
 \
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 We can ping nobody from h4. No packet send. This is because the netwqork mask of h4 is 31. This means that only 10.0.0.4 and 10.0.0.5 belong to the same subnet. h4 does not even try to ping as it also doesn't know a default gateway (there is none because all hosts are in the same LAN)\
-\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \pard\pardeftab720\partightenfactor0
@@ -238,6 +248,7 @@ ip addr del 10.0.0.4/31 dev h4-eth0\
 \
 \pard\pardeftab720\partightenfactor0
 \cf6 h4 belongs to the same subnet as h1,h2 and h3 and shoudl therefore have the same IP maks as them. The solution would be to change the mask from 31 to 24\
+\pard\pardeftab720\partightenfactor0
 \cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
@@ -252,6 +263,7 @@ With IPv6, you don\'92t have to configure DHCP servers, or manually assign IP ad
 \
 \pard\pardeftab720\partightenfactor0
 \cf6 Ipv6 allows hosts on the same LAN to not have the same IP mask configuration\
+\pard\pardeftab720\partightenfactor0
 \cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
@@ -271,11 +283,26 @@ With IPv6, you don\'92t have to configure DHCP servers, or manually assign IP ad
 \f1\i0\b0 \cf0 [A9]\
 100% of the packets dropped (0/12 received).\
 \pard\pardeftab720\partightenfactor0
-\cf0 \cb10 Explain why\cb1 \
+\cf0 \cb8 Explain why\cb1 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \
+\
+
+\f3\i Full explanation:
+\f1\i0 \
+When the bridges are first plugged in, all their forwarding tables are empty. \
+When a frame is sent from a host to another, the switch looks at his table to see if the destination exists. If the destination doesn\'92t exist (which is the case for us), the switch broadcasts the packet on all of its ports (except the one it arrived on). When these packets reach the other bridges, the same algorithm is repeated and the bridges broadcast those packets again to all their interfaces. This first bridge then receives these frames again, still with unknown destinations so it broadcasts them again. This cycle goes on forever and creates a \'93broadcast storm\'94, which will overwhelm switches so as to render the network unable to transport normal traffic.\
+\
+\
+\
+Short explanation\
+Having more than one active path to reach a destination creates loops in the topology, which causes packets to be constantly repeated. \
+This is due to the fact that, if a switch receives a packet which destination doesn\'92t exist in its routing table, it will broadcast the packet on all of its ports (except the one it arrived on). Therefore, this will create an endless loop which will overwhelm switches so as to render the network unable to transport normal traffic.\
+\
+\
+\
 \pard\pardeftab720\partightenfactor0
-\cf0 100% of the\cf11  packets are dropped. This is because there is a network loop that creates congestion when a packet is broadcast (i.e. each switch broadcasts indefinitely, for example one of the broadcast loop can be s1 --> s2, s2\'97> s3, s3 \'97> 1).\cf0 \
+\cf0 100% of the\cf6  packets are dropped. This is because there is a network loop that creates congestion when a packet is broadcast (i.e. each switch broadcasts indefinitely, for example one of the broadcast loop can be s1 --> s2, s2\'97> s3, s3 \'97> 1).\cf0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \
 \pard\pardeftab720\partightenfactor0
@@ -291,9 +318,17 @@ With IPv6, you don\'92t have to configure DHCP servers, or manually assign IP ad
 \pard\pardeftab720\partightenfactor0
 
 \f1\i0\b0 \cf0 [A10]\
-100% of the packets dropped.\
+96% of the packets dropped.\
 \pard\pardeftab720\partightenfactor0
-\cf0 \cb10 Explain why\cb1 \
+\cf0 \cb8 Explain why\cb1 \
+\
+\
+Network layer slide 38\
+\
+In order for h1 to be able to send a packet to h4, it must find h4\'92s MAC address. In order to find a MAC address with IPv6, h1 sends an Neighbour Solicitation (NS) packet using the Neighbour Discovery Protocol (NDP) containing the question: \'93who has IP address h4 ?\'94. The IP destination address of this packet is a special multicast address (Solicited Node Multicast Address). The MAC address is derived from the multicast IP address. The NS packet is received by all hosts whose IP address has the same 24 bits as B (see later slide).\
+\
+As opposed to IPv4 (which uses broadcast), IPv6 uses the NDP protocol. The NDP protocol uses a special multicast address called the \'93Solicited Node Multicast Address\'94, which is obtained by adding the last 24 bits of target IP address to ff02::1:ff00:0/104. A packet with such a destination address is forwarded by the MAC layer to all nodes that listen to this multicast address.\
+\
 \
 \pard\pardeftab720\partightenfactor0
 \cf6 87%.First destination is unreachable as the systems probably detects the loop. Then we start receiveing replies but with a delay of at least 7 seconds.\cf0 \
@@ -310,6 +345,7 @@ With IPv6, you don\'92t have to configure DHCP servers, or manually assign IP ad
 \f1\i0\b0 \cf0 [A11]\
 The Spanning Tree Protocol forces the active topology to be loop\uc0\u8208 free. In order to do this, it de\u8208 activate some ports such that the remaining topology is a tree that spans all bridges and adapts to failures and additions through time.\
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 The spanning tree protocol constructs the minimum spanning tree of network by deactivating some ports. \cf0 \
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
@@ -379,22 +415,22 @@ From h1 to h3:\
 \pard\pardeftab720\partightenfactor0
 
 \f0\b \cf7 h1
-\f1\b0  \'97> s1 \'97> s2 \'97> 
-\f0\b h3
-\f1\b0 \
+\f1\b0 \cf7  \'97> s1 \'97> s2 \'97> 
+\f0\b \cf7 h3
+\f1\b0 \cf7 \
 \
 From h3 to h4:\
 
-\f0\b h3
-\f1\b0  \'97> s2 \'97> s3 \'97> 
-\f0\b h4
-\f1\b0 \
+\f0\b \cf7 h3
+\f1\b0 \cf7  \'97> s2 \'97> s3 \'97> 
+\f0\b \cf7 h4
+\f1\b0 \cf7 \
 \
 From h2 to h4:\
 
-\f0\b h2 
-\f1\b0 \'97> s1 \'97>  s2 \'97> s3 \'97> 
-\f0\b h4\
+\f0\b \cf7 h2 
+\f1\b0 \cf7 \'97> s1 \'97>  s2 \'97> s3 \'97> 
+\f0\b \cf7 h4\
 \
 \pard\pardeftab720\partightenfactor0
 
@@ -500,7 +536,7 @@ PING 2020::4:2(2020::4:2) 56 data bytes\
 All the hosts are unable to reach one another\
 \
 No host is able to reach any another one using IPv4 or IPv6.\
-\
+\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\cf4 \
 \pard\pardeftab720\partightenfactor0
@@ -562,8 +598,9 @@ r2 has no routing routes for h1,h2 and h3\
 echo 1 > /proc/sys/net/ipv4/ip_forward\
 echo 1 > /proc/sys/net/ipv6/conf/all/forwarding\
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 r1.cmd('echo 1 > /proc/sys/net/ipv4/ip_forward')\
-r1.cmd('echo 1 > /proc/sys/net/ipv6/conf/all/forwarding')\cf4 \
+r1.cmd('echo 1 > /proc/sys/net/ipv6/conf/all/forwarding')\cf4 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\cf4 \
 \pard\pardeftab720\partightenfactor0
@@ -575,7 +612,9 @@ r1.cmd('echo 1 > /proc/sys/net/ipv6/conf/all/forwarding')\cf4 \
 \f1\i0\b0 [A20]\
 Every host except from h1 and h4, which are the only hosts that are able to ping each another.\
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 Only h1 and h4 can ping each other\
+\pard\pardeftab720\partightenfactor0
 \cf4 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\cf4 \
@@ -590,6 +629,7 @@ ip route add default via 10.0.2.1\
 ip -6 route add default via 2020::2:1\
 \
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 h2.cmd('ip route add default via 10.0.2.1') and h2.cmd('ip -6 route add default via 2020::2:1'). We first removed the previous defaults\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\cf4 \
@@ -602,6 +642,7 @@ results?
 [A22]\
 Yes, h1, h2 and h4 are able to ping each other, however h3 is still unable to ping or receive ping requests from the other hosts.\
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 h1,h2 and h4 can now communicate. h3 is still cut from everyone else\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\cf4 \
@@ -660,10 +701,8 @@ Yes, the problem is that there are no routes defined to reach the subnets that h
 ip -6 route add 2020::1:0/112 via 2020::5:1\
 ip -6 route add 2020::2:0/112 via 2020::5:1\
 ip -6 route add 2020::4:0/112 via 2020::6:2\
-\pard\pardeftab720\partightenfactor0
-\cf4 \
-\pard\pardeftab720\partightenfactor0
-\cf4 \
+\
+\
 As before we have to add routes for subnets 1 2 and 4\
 r2.cmd('ip -6 route add 2020::1:0/112 via 2020::5:1')\
 	r2.cmd('ip -6 route add 2020::2:0/112 via 2020::5:1')\
@@ -678,7 +717,7 @@ r2.cmd('ip -6 route add 2020::1:0/112 via 2020::5:1')\
 
 \f1\i0\b0 [A26]\
 \pard\pardeftab720\partightenfactor0
-\cf4 \cb10 MARC\cb1 \
+\cf4 \cb8 MARC\cb1 \
 \
 subnet mask \
 - switches: \
@@ -688,8 +727,7 @@ subnet mask \
 \
 \
 IP address assignment\
-\pard\pardeftab720\partightenfactor0
-\cf4 - switches\
+- switches\
 - router\
 \
 \pard\pardeftab720\partightenfactor0
@@ -697,18 +735,18 @@ IP address assignment\
 \
 \
 
-\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrs\brdrw10\brdrcf12 \trbrdrl\brdrs\brdrw10\brdrcf12 \trbrdrr\brdrs\brdrw10\brdrcf12 
-\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf12 \clbrdrl\brdrs\brdrw10\brdrcf12 \clbrdrb\brdrs\brdrw10\brdrcf12 \clbrdrr\brdrs\brdrw10\brdrcf12 \clpadl100 \clpadr100 \gaph\cellx4320
-\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf12 \clbrdrl\brdrs\brdrw10\brdrcf12 \clbrdrb\brdrs\brdrw10\brdrcf12 \clbrdrr\brdrs\brdrw10\brdrcf12 \clpadl100 \clpadr100 \gaph\cellx8640
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrt\brdrs\brdrw10\brdrcf9 \trbrdrl\brdrs\brdrw10\brdrcf9 \trbrdrr\brdrs\brdrw10\brdrcf9 
+\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf9 \clbrdrl\brdrs\brdrw10\brdrcf9 \clbrdrb\brdrs\brdrw10\brdrcf9 \clbrdrr\brdrs\brdrw10\brdrcf9 \clpadl100 \clpadr100 \gaph\cellx4320
+\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf9 \clbrdrl\brdrs\brdrw10\brdrcf9 \clbrdrb\brdrs\brdrw10\brdrcf9 \clbrdrr\brdrs\brdrw10\brdrcf9 \clpadl100 \clpadr100 \gaph\cellx8640
 \pard\intbl\itap1\pardeftab720\ri-340\partightenfactor0
 
 \f0\b \cf0 mininet> r2 ip route show\cell 
 \pard\intbl\itap1\pardeftab720\ri-340\partightenfactor0
 \cf0 mininet> r2 ip -6 route show\cell \row
 
-\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw10\brdrcf12 \trbrdrb\brdrs\brdrw10\brdrcf12 \trbrdrr\brdrs\brdrw10\brdrcf12 
-\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf12 \clbrdrl\brdrs\brdrw10\brdrcf12 \clbrdrb\brdrs\brdrw10\brdrcf12 \clbrdrr\brdrs\brdrw10\brdrcf12 \clpadl100 \clpadr100 \gaph\cellx4320
-\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf12 \clbrdrl\brdrs\brdrw10\brdrcf12 \clbrdrb\brdrs\brdrw10\brdrcf12 \clbrdrr\brdrs\brdrw10\brdrcf12 \clpadl100 \clpadr100 \gaph\cellx8640
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trbrdrl\brdrs\brdrw10\brdrcf9 \trbrdrb\brdrs\brdrw10\brdrcf9 \trbrdrr\brdrs\brdrw10\brdrcf9 
+\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf9 \clbrdrl\brdrs\brdrw10\brdrcf9 \clbrdrb\brdrs\brdrw10\brdrcf9 \clbrdrr\brdrs\brdrw10\brdrcf9 \clpadl100 \clpadr100 \gaph\cellx4320
+\clvertalt \clshdrawnil \clbrdrt\brdrs\brdrw10\brdrcf9 \clbrdrl\brdrs\brdrw10\brdrcf9 \clbrdrb\brdrs\brdrw10\brdrcf9 \clbrdrr\brdrs\brdrw10\brdrcf9 \clpadl100 \clpadr100 \gaph\cellx8640
 \pard\intbl\itap1\pardeftab720\ri-340\partightenfactor0
 
 \f1\b0 \cf0 10.0.1.0/24 via 10.0.5.1 dev r2-eth1 \
@@ -719,10 +757,10 @@ IP address assignment\
 10.0.6.0/24 dev r2-eth2 proto kernel scope link src 10.0.6.1\
 \cell 
 \pard\intbl\itap1\pardeftab720\ri-340\partightenfactor0
-\cf0 \cb13 2020::1:0/112 via 2020::5:1\cb1  dev r2-eth1 metric 1024 pref medium\
-\cb13 2020::2:0/112 via 2020::5:1\cb1  dev r2-eth1 metric 1024 pref medium\
+\cf0 \cb10 2020::1:0/112 via 2020::5:1\cb1  dev r2-eth1 metric 1024 pref medium\
+\cb10 2020::2:0/112 via 2020::5:1\cb1  dev r2-eth1 metric 1024 pref medium\
 2020::3:0/112 dev r2-eth0 proto kernel metric 256 pref medium\
-\cb13 2020::4:0/112 via 2020::6:2\cb1  dev r2-eth2 metric 1024 pref medium\
+\cb10 2020::4:0/112 via 2020::6:2\cb1  dev r2-eth2 metric 1024 pref medium\
 2020::5:0/112 dev r2-eth1 proto kernel metric 256 pref medium\
 2020::6:0/112 dev r2-eth2 proto kernel metric 256 pref medium\
 fe80::/64 dev r2-eth1 proto kernel metric 256 pref medium\
@@ -747,8 +785,10 @@ Routers routing tables must be configured manually\
 \f2\i\b Q28/ How do they differ in performance/efficiency in a network with loops?\
 
 \f1\i0\b0 [A28]\
-\cb8 MARC\
-\cb1 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb8 MARC\
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb1 \
 \
 \
 \pard\pardeftab720\partightenfactor0
@@ -836,8 +876,10 @@ capture the packets when asking for an IP address from DHCP.\
 - The IPv4 address of the DHCP server is 10.0.2.2 (= source IP address of the DHCP ACK packet sent to r1)\
 \
  \
+\pard\pardeftab720\partightenfactor0
 \cf6 The IPv4 address allocated by the DHCP server to r1-eth1 is 10.0.2.16/24. This IP is in the range of the private addresses.\
 When we run wireshark on router 1 and ask for a IP address we get a DHCP ACK from 10.0.2.2\
+\pard\pardeftab720\partightenfactor0
 \cf4 \
 \
 \
@@ -856,7 +898,7 @@ We have 2 devices on a private network with private IP addresses but only 1 publ
 \
 \
 \pard\pardeftab720\partightenfactor0
-\cf4 \cb10 In order to connect h1 and h2 to the Internet, we need 2 IP addresses. However, since the router r1 has only 1 interface connected to the Internet, both h1 and h2 won\'92t be able to connect to the Internet.\
+\cf4 \cb8 In order to connect h1 and h2 to the Internet, we need 2 IP addresses. However, since the router r1 has only 1 interface connected to the Internet, both h1 and h2 won\'92t be able to connect to the Internet.\
 \pard\pardeftab720\partightenfactor0
 \cf4 \cb1 \
 Since h1 and h2 have private addresses, another host on the internet won\'92t know what address to reply to\
@@ -867,8 +909,8 @@ Since h1 and h2 have private addresses, another host on the internet won\'92t kn
 \cf4 \
 \pard\pardeftab720\partightenfactor0
 \cf7 Goal of NAT: allow 
-\f5 \cf7 \uc0\u55349 \u56411 
-\f1 \cf7  > 1 devices to use one single IP address.\cf4 \
+\f5 \uc0\u55349 \u56411 
+\f1  > 1 devices to use one single IP address.\cf4 \
 \
 \cf7 NAT translates ( = masquerades ) internal IP address and internal port number into NAT IP address and NAT port number\
 Outside sees only NAT IP address and NAT port\
@@ -899,6 +941,7 @@ eth1?
 When the packets go out with UDP, the source address changes from 10.0.0.2 when captured on r1-eth0 to 10.0.2.16 when captured on r1-eth1. The time to live is also decreased by 1.\
 When the packets come back with ICMP, the destination address changes from 10.0.2.16 when captured on r1-eth1 to 10.0.0.2 when captured on r1-eth0. The time to live also decreases by 1. \
 \
+\pard\pardeftab720\partightenfactor0
 \cf6 r1 is able to forwrdACpacketsa from one interface to another. The difference is that when a packet leaves r1-eth1 , it's source IP is modified with the IP of r1.eth1. Therefore every incoming message from h1 or h2 has it's source IP addresse rewritten to the IP address of r1.eth\cf4 \
 \
 \
@@ -941,6 +984,7 @@ The path of the packets goes like this:  h1 \'97> r1, r1 \'97> google, google \'
 \
 \pard\pardeftab720\partightenfactor0
 \cf8 MARC\cf4 \
+\pard\pardeftab720\partightenfactor0
 \cf6 The ICMP packet have dfferent source address because of the NAT. They also have a different query id\
 The packets from h1 have source IP h1\cf4 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
