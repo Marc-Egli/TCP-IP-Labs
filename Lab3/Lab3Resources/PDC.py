@@ -54,4 +54,3 @@ while True :
 
 s_4.close()
 s_6.close()
-
