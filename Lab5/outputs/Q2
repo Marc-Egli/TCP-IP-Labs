@@ -534,62 +534,145 @@
  86.8:  9544.5kbps avg ( 9564.1[inst], 9541.9[mov.avg]) cwnd 23 rtt 25.5ms
  87.0:  9544.5kbps avg ( 9564.1[inst], 9541.9[mov.avg]) cwnd 13 rtt 14.6ms
  87.1:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 18 rtt 19.9ms
- 87.3:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 22 rtt 24.6ms
- 87.5:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 12 rtt 15.3ms
- 87.6:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 16 rtt 18.2ms
- 87.8:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 20 rtt 23.0ms
- 88.0:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 16 rtt 25.3ms
- 88.1:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 20 rtt 22.5ms
- 88.3:  9544.4kbps avg ( 9528.1[inst], 9541.2[mov.avg]) cwnd 23 rtt 25.8ms
- 88.4:  9544.4kbps avg ( 9528.1[inst], 9541.2[mov.avg]) cwnd 19 rtt 21.5ms
- 88.6:  9544.4kbps avg ( 9528.1[inst], 9541.2[mov.avg]) cwnd 22 rtt 25.2ms
- 88.8:  9544.4kbps avg ( 9528.1[inst], 9541.2[mov.avg]) cwnd 17 rtt 19.4ms
- 88.9:  9544.4kbps avg ( 9528.1[inst], 9541.2[mov.avg]) cwnd 20 rtt 22.8ms
- 89.1:  9544.4kbps avg ( 9528.1[inst], 9541.2[mov.avg]) cwnd 16 rtt 25.3ms
- 89.3:  9544.4kbps avg ( 9528.1[inst], 9541.2[mov.avg]) cwnd 19 rtt 21.5ms
- 89.4:  9544.4kbps avg ( 9546.6[inst], 9541.8[mov.avg]) cwnd 22 rtt 25.3ms
- 89.6:  9544.4kbps avg ( 9546.6[inst], 9541.8[mov.avg]) cwnd 19 rtt 20.6ms
- 89.8:  9544.4kbps avg ( 9546.6[inst], 9541.8[mov.avg]) cwnd 22 rtt 25.2ms
- 89.9:  9544.4kbps avg ( 9546.6[inst], 9541.8[mov.avg]) cwnd 17 rtt 20.2ms
- 90.1:  9544.4kbps avg ( 9546.6[inst], 9541.8[mov.avg]) cwnd 21 rtt 22.9ms
- 90.3:  9544.4kbps avg ( 9546.6[inst], 9541.8[mov.avg]) cwnd 16 rtt 21.8ms
- 90.4:  9544.4kbps avg ( 9546.6[inst], 9541.8[mov.avg]) cwnd 19 rtt 20.9ms
- 90.6:  9544.7kbps avg ( 9564.0[inst], 9544.0[mov.avg]) cwnd 23 rtt 25.3ms
- 90.7:  9544.7kbps avg ( 9564.0[inst], 9544.0[mov.avg]) cwnd 19 rtt 20.6ms
- 90.9:  9544.7kbps avg ( 9564.0[inst], 9544.0[mov.avg]) cwnd 22 rtt 25.2ms
- 91.1:  9544.7kbps avg ( 9564.0[inst], 9544.0[mov.avg]) cwnd 18 rtt 19.7ms
- 91.2:  9544.7kbps avg ( 9564.0[inst], 9544.0[mov.avg]) cwnd 21 rtt 23.5ms
- 91.4:  9544.7kbps avg ( 9564.0[inst], 9544.0[mov.avg]) cwnd 11 rtt 23.5ms
- 91.6:  9544.7kbps avg ( 9564.0[inst], 9544.0[mov.avg]) cwnd 15 rtt 16.1ms
- 91.7:  9544.6kbps avg ( 9541.3[inst], 9543.7[mov.avg]) cwnd 20 rtt 22.0ms
- 91.9:  9544.6kbps avg ( 9541.3[inst], 9543.7[mov.avg]) cwnd 23 rtt 25.5ms
- 92.0:  9544.6kbps avg ( 9541.3[inst], 9543.7[mov.avg]) cwnd 18 rtt 20.0ms
- 92.2:  9544.6kbps avg ( 9541.3[inst], 9543.7[mov.avg]) cwnd 22 rtt 24.7ms
- 92.4:  9544.6kbps avg ( 9541.3[inst], 9543.7[mov.avg]) cwnd 17 rtt 20.0ms
- 92.5:  9544.6kbps avg ( 9541.3[inst], 9543.7[mov.avg]) cwnd 20 rtt 22.9ms
- 92.7:  9544.6kbps avg ( 9541.3[inst], 9543.7[mov.avg]) cwnd 16 rtt 25.9ms
- 92.9:  9544.6kbps avg ( 9545.2[inst], 9543.9[mov.avg]) cwnd 20 rtt 22.4ms
- 93.0:  9544.6kbps avg ( 9545.2[inst], 9543.9[mov.avg]) cwnd 15 rtt 23.9ms
- 93.2:  9544.6kbps avg ( 9545.2[inst], 9543.9[mov.avg]) cwnd 19 rtt 22.1ms
- 93.4:  9544.6kbps avg ( 9545.2[inst], 9543.9[mov.avg]) cwnd 22 rtt 26.8ms
- 93.5:  9544.6kbps avg ( 9545.2[inst], 9543.9[mov.avg]) cwnd 18 rtt 19.4ms
- 93.7:  9544.6kbps avg ( 9545.2[inst], 9543.9[mov.avg]) cwnd 21 rtt 23.3ms
- 93.9:  9544.6kbps avg ( 9545.2[inst], 9543.9[mov.avg]) cwnd 17 rtt 20.6ms
- 94.0:  9543.9kbps avg ( 9489.3[inst], 9538.4[mov.avg]) cwnd 20 rtt 22.8ms
- 94.2:  9543.9kbps avg ( 9489.3[inst], 9538.4[mov.avg]) cwnd 23 rtt 26.4ms
- 94.3:  9543.9kbps avg ( 9489.3[inst], 9538.4[mov.avg]) cwnd 13 rtt 14.6ms
- 94.5:  9543.9kbps avg ( 9489.3[inst], 9538.4[mov.avg]) cwnd 18 rtt 19.9ms
- 94.7:  9543.9kbps avg ( 9489.3[inst], 9538.4[mov.avg]) cwnd 22 rtt 24.6ms
- 94.8:  9543.9kbps avg ( 9489.3[inst], 9538.4[mov.avg]) cwnd 12 rtt 15.3ms
- 95.0:  9543.9kbps avg ( 9489.3[inst], 9538.4[mov.avg]) cwnd 16 rtt 18.2ms
- 95.2:  9544.2kbps avg ( 9563.9[inst], 9541.0[mov.avg]) cwnd 20 rtt 23.0ms
- 95.3:  9544.2kbps avg ( 9563.9[inst], 9541.0[mov.avg]) cwnd 16 rtt 26.0ms
- 95.5:  9544.2kbps avg ( 9563.9[inst], 9541.0[mov.avg]) cwnd 19 rtt 22.4ms
- 95.7:  9544.2kbps avg ( 9563.9[inst], 9541.0[mov.avg]) cwnd 23 rtt 25.6ms
- 95.8:  9544.2kbps avg ( 9563.9[inst], 9541.0[mov.avg]) cwnd 13 rtt 14.6ms
- 96.0:  9544.2kbps avg ( 9563.9[inst], 9541.0[mov.avg]) cwnd 18 rtt 19.9ms
- 96.1:  9544.2kbps avg ( 9563.9[inst], 9541.0[mov.avg]) cwnd 22 rtt 24.6ms
- 96.3:  9544.4kbps avg ( 9564.5[inst], 9543.3[mov.avg]) cwnd 12 rtt 15.3ms
- 96.5:  9544.4kbps avg ( 9564.5[inst], 9543.3[mov.avg]) cwnd 16 rtt 18.2ms
- 96.6:  9544.4kbps avg ( 9564.5[inst], 9543.3[mov.avg]) cwnd 20 rtt 23.0ms
+ 87.3:  9544.6kbps avg ( 9549.9[inst], 9542.7[mov.avg]) cwnd 22 rtt 24.6m
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 4 -> 1050
+ x -> 1000
+ 1050 -> 
+
+ A1 Less than maximal capacity therefore we will have no loss and goodput = expected goodput
+ A2 Will use the complete link therefore there will be a loss and lower goodput.
+ First let's compute the goodput : h1 : 1000* 1000/1066 = 938 kb/s and h2 : 4000*1000/1066  = 3752 kb/s
+ The loss is therefore equal to the difference between the expecte gooput and the achievable one
+ h1_loss = 100 - 100* 938 / 1000 => 6%         h2_loss = 100 - 100*3752/4000 = 6%
+ 
+ 5/10 = 0.5
+ 
+A3 	
+h1 : will have 500kb/s  -> 500 * 1000/1066 = 469
+h2 : will have 4500 kb/s -> 4500 * 1000/1066 = 4221
+
+h1_loss = 100 - 100* 469/1000 = 53.1 %
+h2_loss = 100 - 100* 4221/9000 = 53.1%
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
