@@ -1,0 +1,66 @@
+MLcourse Paper #186 Reviews and Comments
+===========================================================================
+Paper #186 Project 2 - Road segmentation
+
+
+Review #186A
+===========================================================================
+
+PDF report feedback
+-------------------
++ "Before diving straight into the implementation, we took a look at the training dataset to unveil some potential issues or bottlenecks in the performance. Some examples are the trees covering roads, roads that are too narrow for a clear spatial context, and ultimately roads-like structures as sidewalks, parking lots or railways." Very nice!
+
+- The abstract is uninformative. A better abstract would give the main points of the paper and convey what you are trying to do instead of stating very general points like "Among the most difficult topics in Machine Learning is computer vision, and more precisely image segmentation.". You should elaborate more on the last two sentences on the abstract, which is informative.
+
+- Figure 2 is not mentioned in the text.
+
+- You should be consistent with the naming. Stick to "Logistic" or "logistic". 
+
+- Result validation is confusing. I am still not sure what is the strategy for selecting the best model. 
+
+- Although the augmentation method is proposed as improvement, there is no baseline without augmentation. 
+
+- In general a better Table I would have been better with different window sizes and so on.
+
+PDF report score
+----------------
+6. 70%
+
+Code feedback
+-------------
+- Please ignore the code feedback.
+
+Code quality score
+------------------
+B. Adequate (full score)
+
+
+
+Review #186B
+===========================================================================
+
+PDF report feedback
+-------------------
+This paper is well-structured. The pipeline is clear and the performance is quite good. The post-processing looks interesting.
+
+There are a few minor issues:
+
+- When searching through a grid of hyperparameters, try to avoid the best values to be one of the endpoints. For example, the best batch size among {6, 8, 10, 12, 16} is 16, but it is natural to think if batch size greater than 16 is better. The same thing applies to choose the learning rates {1e-3, 1e-4, 1e-5}.
+- It is better if you can provide the performance gain of the intermediate steps. For example, in the second post-processing step, there is a claim "By doing this we are able to stabilize the loss and F1 score when submitting the results.". Although we can see its effect from Figure 3, it is better if you can also include the performance with/without it in table 1.
+- Typo: Page 3 `losing` not `loosing`.
+
+PDF report score
+----------------
+7. 80%
+
+Code feedback
+-------------
+- The readme is written in details and looks nice;
+- The code is well organized with proper documentation/comment.
+- The arguments and return values are typed to be safer.
+
+Overall, a very good coding practice.
+
+Code quality score
+------------------
+B. Adequate (full score)
