@@ -2,12 +2,12 @@
 \cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\fswiss\fcharset0 Helvetica-BoldOblique;
 \f3\fswiss\fcharset0 Helvetica-Oblique;\f4\fmodern\fcharset0 Courier;}
 {\colortbl;\red255\green255\blue255;\red59\green0\blue164;\red0\green0\blue255;\red85\green142\blue40;
-\red251\green2\blue7;\red127\green127\blue127;\red253\green128\blue8;\red0\green0\blue0;\red0\green0\blue255;
-\red0\green0\blue0;}
+\red251\green2\blue7;\red127\green127\blue127;\red253\green128\blue8;\red0\green0\blue0;\red0\green0\blue0;
+}
 {\*\expandedcolortbl;;\cssrgb\c30181\c13393\c70360;\cssrgb\c1680\c19835\c100000;\cssrgb\c39975\c61335\c20601;
-\cssrgb\c100000\c14913\c0;\cssrgb\c57046\c57047\c57046;\cssrgb\c100000\c57637\c0;\cssrgb\c0\c0\c0;\cssrgb\c1680\c19835\c100000;
-\csgray\c0\c0;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww20360\viewh21620\viewkind0
+\cssrgb\c100000\c14913\c0;\cssrgb\c57046\c57047\c57046;\cssrgb\c100000\c57637\c0;\cssrgb\c0\c0\c0;\csgray\c0\c0;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww20280\viewh21620\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\b\fs36 \cf0 COM-407: TCP/IP NETWORKING
@@ -42,7 +42,7 @@ However, the destination IP addresses differ (10.0.2.15 on the guest / virtual m
 Since our VM is set up in NAT networking mode, the host machine will act as a router that hides the virtual machine behind it. The packets sent out by the guest machine are received by VirtualBox's NAT engine, which extracts the TCP/IP data and resends it using the host operating system. So to the physical router that is connected to the internet, the traffic will appear to be coming from the host machine (10.102.1.160), and therefore will reply back to destination address 10.102.1.160. The host then repacks and resends the packets received back to the guest machine (10.0.2.15) on its private network.\
 \
 The port number of the destination differs as well as it is chosen amongst the available ones for each machine (host and guest).\cf2 \
-\cf0 \
+\cf0 \
 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 \
@@ -52,8 +52,10 @@ The port number of the destination differs as well as it is chosen amongst the a
 \f1\i0\b0 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 [A2]\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf3 There is one link between host 1 and switch 1 and another link between host 2 and switch 1. The controller is not included in the network but is needed to control the switches.\
-\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 \pard\pardeftab720\partightenfactor0
@@ -73,7 +75,9 @@ h2 also has 1 logical interface: lo (loopback interface) and it's IP address is 
 \f2\i\b Q4/ What is the source IP address of the ICMP echo requests sent from h1 to h2?
 \f1\i0\b0 \
 [A4]\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf3 The source IP address of the ICMP echo request sent from h1 to h2 is 10.0.0.1 which is host 1\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\pardirnatural\partightenfactor0
 \cf0 \
 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
@@ -193,7 +197,7 @@ $ ping 10.10.10.4\cf0 \
 \f1\b0 When pinging 10.10.10.4 from the host PC1:\
 - PC1-eth0 broadcasts an ARP request asking \'93Who has 10.10.10.4? Tell 10.0.0.1\'94\
 - PC4-eth0 gets a ARP broadcast from PC1-eth0 asking \'93Who has 10.10.10.4? Tell 10.0.0.1\'94, but does not reply, as the IP hosts haven\'92t been configured on each interface (with IP address of this interface, Mask of this interface, IP address of default router, IP address of DNS server)\
-- Therefore the ping command fails with message \'93Destination unreachable (Host unreachable)\'94\
+- Therefore the ping command fails with message \'93Destination unreachable (Host unreachable)\'94\
 \
 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
@@ -201,9 +205,9 @@ $ ping 10.10.10.4\cf0 \
 \pard\pardeftab720\partightenfactor0
 
 \f3\i \cf6 Calculate the link-local IPv6 address of PC4-eth0 interface:
-\f1\i0 \cf6 \
+\f1\i0 \
 
-\f3\i \cf6 MAC address of PC4-eth0:		\cf0 		         12:38:eb:11:6d:8c\
+\f3\i MAC address of PC4-eth0:		\cf0 		         12:38:eb:11:6d:8c\
 \cf6 link-local IPv6 address of PC4-eth0 interface: \cf0 	\cf4 fe80::\cf0 1
 \f2\b \cf5 0
 \f3\b0 \cf0 38:eb
@@ -230,19 +234,19 @@ When pinging the link-local IPv6 address of PC4-eth0 interface (ping6 \cf4 fe80:
 \f1\b0 \cf0  (\cf7 fe80::d8bd:1fff:fee3:3b35\cf8 )\cf7  \cf0 sends a 
 \f0\b Neighbor Solicitation (NS) packet
 \f1\b0  for 
-\f0\b \cf9 PC4-eth0
-\f1\b0  i\cf0 nterface (\cf9 \cb10 fe80::1038:ebff:fe11:6d8c\cf0 \cb1 ) to destination 
+\f0\b \cf3 PC4-eth0
+\f1\b0  i\cf0 nterface (\cf3 \cb9 fe80::1038:ebff:fe11:6d8c\cf0 \cb1 ) to destination 
 \f0\b ff02::1:ff11:6d8c\
 
 \f1\b0 2) 
-\f0\b \cf9 PC4-eth0 
+\f0\b \cf3 PC4-eth0 
 \f1\b0 \cf8 receives that 
 \f0\b NS packet
 \f1\b0  from 
 \f0\b \cf7 PC1-eth0
 \f1\b0 \cf8 \
 3) 
-\f0\b \cf9 PC4-eth0 
+\f0\b \cf3 PC4-eth0 
 \f1\b0 \cf8 sends backs an 
 \f0\b \cf0 Neighbor Advertisement (NA) packet
 \f1\b0  to 
@@ -253,8 +257,8 @@ When pinging the link-local IPv6 address of PC4-eth0 interface (ping6 \cf4 fe80:
 \f1\b0 \cf0  receives the 
 \f0\b NA packet 
 \f1\b0 from 
-\f0\b \cf9 PC4-eth0
-\f1\b0 \cf0  (\cf9 \cb10 fe80::1038:ebff:fe11:6d8c) \cf8  \cf0 \cb1 \
+\f0\b \cf3 PC4-eth0
+\f1\b0 \cf0  (\cf3 \cb9 fe80::1038:ebff:fe11:6d8c) \cf8  \cf0 \cb1 \
 5) PC1-eth0 can now ping request PC4-eth0 and PC4-eth0 can ping reply to PC1-eth0.\
 \
 \pard\pardeftab720\partightenfactor0
@@ -270,7 +274,7 @@ When pinging the link-local IPv6 address of PC4-eth0 interface (ping6 \cf4 fe80:
 
 \f1\i0 \cf6 \
 ping6 <link local address of PC4 eth2> -I PC1-eth0\cf0 \
-\cf6 ping6\cf0  \cf9 fe80::f8fb:3cff:fecf:d16c\cf0  -I \cf6 PC1-eth0\cf0 \
+\cf6 ping6\cf0  \cf3 fe80::f8fb:3cff:fecf:d16c\cf0  -I \cf6 PC1-eth0\cf0 \
 \pard\pardeftab720\partightenfactor0
 
 \f2\i\b \cf0 \
@@ -283,12 +287,12 @@ Q13/ Describe and explain the differences (if any) between the output from the t
 \f1\b0 \cf0  (\cf7 fe80::d8bd:1fff:fee3:3b35\cf8 )\cf7  \cf0 sends a 
 \f0\b Neighbor Solicitation (NS) packet
 \f1\b0  for 
-\f0\b \cf9 PC4-eth2
-\f1\b0 \cf0  (\cf9 \cb10 fe80::f8fb:3cff:fecf:d16c\cf0 \cb1 ) to destination 
+\f0\b \cf3 PC4-eth2
+\f1\b0 \cf0  (\cf3 \cb9 fe80::f8fb:3cff:fecf:d16c\cf0 \cb1 ) to destination 
 \f0\b ff02::1:ffcf:d16c
 \f1\b0 , but the destination is unreachable, so the PC1-eth0 keeps sending the same NS packet.\
 2) We can see on PC4\'92s Wireshark capture that those NS packets are indeed captured, but on interface 0 instead of interface 2, to which they are intended. Therefore, 
-\f0\b \cf9 PC4-eth2 
+\f0\b \cf3 PC4-eth2 
 \f1\b0 \cf8 does not see these packets and doesn\'92t reply.
 \f0\b \cf0 \
 \
@@ -320,7 +324,7 @@ fe80::/64 dev PC1-eth0 proto kernel metric 256 pref medium\
 \
 # ip -6 route\
 fd24:ec43:12ca:c001:10::/80 dev PC1-eth0 proto kernel metric 256 pref medium\
-fe80::/64 dev PC1eth0 proto kernel metric 256 pref medium\cf9 \
+fe80::/64 dev PC1eth0 proto kernel metric 256 pref medium\cf3 \
 \pard\pardeftab720\partightenfactor0
 \cf0 \
 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
@@ -389,6 +393,7 @@ PC4 ip -6 addr add fd24:ec43:12ca:c001:30::4/80 dev PC4-eth2\
 \pard\pardeftab720\partightenfactor0
 \cf3 In both cases this doesn't work because the IP addresses do not belong to the same subnet and there is no communication between the eth0 and eth1 interfaces of PC4.\
 \
+\pard\pardeftab720\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 \pard\pardeftab720\partightenfactor0
@@ -459,7 +464,7 @@ packets. Write-down any difference in source and destination IP addresses.
 \f1\b0 \
 [A22]\
 \
-We observe that the Ping request destination IP address (malicious server) stays the same (10.10.30.3), but the source\'92s IP address of Alice\'92s computer (10.10.20.2) is replaced by the address of the Home router\'92s interface the packet is going out from: PC4-eth0 (10.10.30.4). \cf9 Therefore the malicious server believes to communicate with the Home router and has no clue that Alice is behind this ping request.\
+We observe that the Ping request destination IP address (malicious server) stays the same (10.10.30.3), but the source\'92s IP address of Alice\'92s computer (10.10.20.2) is replaced by the address of the Home router\'92s interface the packet is going out from: PC4-eth0 (10.10.30.4). \cf3 Therefore the malicious server believes to communicate with the Home router and has no clue that Alice is behind this ping request.\
 \pard\pardeftab720\partightenfactor0
 \cf0 \
 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
@@ -476,11 +481,14 @@ configuration options?\
 \pard\pardeftab720\partightenfactor0
 \cf3 Alice believes to communicate with the bank but in reality she communicates with the malicious server. \
 The router captures the packet that have destination IP 10.10.10.1 (Bank) and rewrites the destination to be 10.10.30.3. It also makes sure that when the malicious server responds to Alice, that the source IP is changed back to the source IP of the bank.\
+\pard\pardeftab720\partightenfactor0
 \cf0 We can therefore induce that the iptables command we just executed on Alice\'92s home router reroutes packets that were destined to the Bank, to the malicious computer.\
 Based on our observations the use cases are as follows:\
  -j MASQUERADE is used to change the source address by replacing it with the address of the interface of the the router the packet is going out from. However, it doesn\'92t reroute the traffic. \
  -j DNAT is used to change the destination address by replacing the destination address of the packet to a new specified destination IP address.\
+\pard\pardeftab720\partightenfactor0
 \cf3 \
+\pard\pardeftab720\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 \pard\pardeftab720\partightenfactor0
@@ -498,6 +506,7 @@ iptables -t nat -A PREROUTING -p icmp -s 10.10.20.2 -d 10.10.10.1 -j DNAT -to-de
 \pard\pardeftab720\partightenfactor0
 
 \f1 \cf3 \kerning1\expnd0\expndtw0 \
+\pard\pardeftab720\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 \pard\pardeftab720\partightenfactor0
@@ -541,6 +550,7 @@ iptables -t nat -A POSTROUTING -o PC4-eth0 -j SNAT --to 10.10.20.2
 \f1 \cf0 \kerning1\expnd0\expndtw0 \
 \pard\pardeftab720\partightenfactor0
 \cf3 \
+\pard\pardeftab720\partightenfactor0
 \cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 \pard\pardeftab720\partightenfactor0
@@ -551,9 +561,11 @@ to the program that runs on PC3 host?\
 \pard\pardeftab720\partightenfactor0
 
 \f1\i0\b0 \cf0 [A27]\
+\pard\pardeftab720\partightenfactor0
 \cf3 With the current PREROUTING rule, PC3 never gets the packets from Alice as they are instantly redirected to the gateway. \
 We should therefore remove the PREROUTING rule and implement the rule it in the program that modifies the traffic in PC3. \
 This would allow PC3 to receive the messages, read them and then re-send them with the correct source and destination IP.\
+\pard\pardeftab720\partightenfactor0
 \cf0 \
 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \pard\pardeftab720\partightenfactor0
@@ -563,12 +575,12 @@ This would allow PC3 to receive the messages, read them and then re-send them wi
 
 \f2\i \cf0 Q28/ Can this attack be mounted by just tampering the ip routing table of Alice\'92s home router (PC4)?
 \f3\b0 \
+\pard\pardeftab720\partightenfactor0
 
-\f1\i0 [A28]\
+\f1\i0 \cf0 [A28]\
 Yes, as long as there is a program on PC3 that modifies the incoming traffic according to the rules defined in A25.\
 \
-\pard\pardeftab720\partightenfactor0
-\cf0 \'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 \pard\pardeftab720\partightenfactor0
 
@@ -576,7 +588,8 @@ Yes, as long as there is a program on PC3 that modifies the incoming traffic acc
 could notice that she is under attack?
 \f1\i0\b0 \
 [A29]\
-\pard\pardeftab720\partightenfactor0
-\cf0 The only way that Alice could notice that she is under attack is if she checks her Home router\'92s routing table and see that the traffic to the bank is redirected to the malicious server.\
+The only way that Alice could notice that she is under attack is if she checks her Home router\'92s routing table and see that the traffic to the bank is redirected to the malicious server.\
+\
+\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\'97\
 \
 }
